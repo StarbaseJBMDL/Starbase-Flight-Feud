@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MISSION COMMANDER CONSOLE</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="mission-control">
+  <header class="console-header">
+    <div class="title-block">
+      <h1 id="main-title">MISSION COMMANDER CONSOLE</h1>
+      <p id="subtitle">STARBASE Flight Feud</p>
+    </div>
+    <nav class="top-row" aria-label="mission status">
+      <section class="status-card" id="round-card">
+        <h2>Current Round</h2>
+        <div class="status-value" id="current-round">1</div>
+      </section>
+      <section class="status-card" id="timer-card">
+        <h2>Countdown</h2>
+        <div class="status-value" id="countdown-timer">60</div>
+        <span class="status-label">seconds</span>
+      </section>
+      <section class="status-card" id="points-card">
+        <h2>Question Points</h2>
+        <div class="status-value" id="question-points">0</div>
+      </section>
+    </nav>
+  </header>
+
+  <main class="mission-grid">
+    <aside class="scoreboard" id="scoreboard" aria-label="team scoreboard">
+      <h2 class="section-title">Team Scoreboard</h2>
+      <div class="team-list">
+        <article class="team-panel" data-team="Alpha">
+          <h3 class="team-name">Alpha</h3>
+          <input type="number" id="score-alpha" class="team-score" value="0" min="0" aria-label="Alpha score">
+          <div class="strike-panel" id="strikes-alpha" aria-label="Alpha strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="alpha">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="alpha">Clear Strikes</button>
+        </article>
+        <article class="team-panel" data-team="Bravo">
+          <h3 class="team-name">Bravo</h3>
+          <input type="number" id="score-bravo" class="team-score" value="0" min="0" aria-label="Bravo score">
+          <div class="strike-panel" id="strikes-bravo" aria-label="Bravo strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="bravo">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="bravo">Clear Strikes</button>
+        </article>
+        <article class="team-panel" data-team="Charlie">
+          <h3 class="team-name">Charlie</h3>
+          <input type="number" id="score-charlie" class="team-score" value="0" min="0" aria-label="Charlie score">
+          <div class="strike-panel" id="strikes-charlie" aria-label="Charlie strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="charlie">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="charlie">Clear Strikes</button>
+        </article>
+        <article class="team-panel" data-team="Delta">
+          <h3 class="team-name">Delta</h3>
+          <input type="number" id="score-delta" class="team-score" value="0" min="0" aria-label="Delta score">
+          <div class="strike-panel" id="strikes-delta" aria-label="Delta strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="delta">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="delta">Clear Strikes</button>
+        </article>
+        <article class="team-panel" data-team="Echo">
+          <h3 class="team-name">Echo</h3>
+          <input type="number" id="score-echo" class="team-score" value="0" min="0" aria-label="Echo score">
+          <div class="strike-panel" id="strikes-echo" aria-label="Echo strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="echo">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="echo">Clear Strikes</button>
+        </article>
+        <article class="team-panel" data-team="Foxtrot">
+          <h3 class="team-name">Foxtrot</h3>
+          <input type="number" id="score-foxtrot" class="team-score" value="0" min="0" aria-label="Foxtrot score">
+          <div class="strike-panel" id="strikes-foxtrot" aria-label="Foxtrot strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="foxtrot">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="foxtrot">Clear Strikes</button>
+        </article>
+        <article class="team-panel" data-team="Golf">
+          <h3 class="team-name">Golf</h3>
+          <input type="number" id="score-golf" class="team-score" value="0" min="0" aria-label="Golf score">
+          <div class="strike-panel" id="strikes-golf" aria-label="Golf strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="golf">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="golf">Clear Strikes</button>
+        </article>
+        <article class="team-panel" data-team="Hotel">
+          <h3 class="team-name">Hotel</h3>
+          <input type="number" id="score-hotel" class="team-score" value="0" min="0" aria-label="Hotel score">
+          <div class="strike-panel" id="strikes-hotel" aria-label="Hotel strikes">
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+            <span class="strike">X</span>
+          </div>
+          <button class="strike-button add-strike" data-team="hotel">Add Strike</button>
+          <button class="strike-button clear-strikes" data-team="hotel">Clear Strikes</button>
+        </article>
+      </div>
+    </aside>
+
+    <section class="answer-board" id="answer-board" aria-label="answer board">
+      <h2 class="section-title">Answer Board</h2>
+      <div class="answer-grid">
+        <article class="answer-card" id="answer-panel-1">
+          <div class="answer-header">
+            <span class="answer-number">1</span>
+            <span class="answer-value" id="answer-value-1">0</span>
+          </div>
+          <div class="answer-text" id="answer-text-1">Hidden Answer</div>
+          <button class="reveal-button" data-answer="1">Reveal</button>
+        </article>
+        <article class="answer-card" id="answer-panel-2">
+          <div class="answer-header">
+            <span class="answer-number">2</span>
+            <span class="answer-value" id="answer-value-2">0</span>
+          </div>
+          <div class="answer-text" id="answer-text-2">Hidden Answer</div>
+          <button class="reveal-button" data-answer="2">Reveal</button>
+        </article>
+        <article class="answer-card" id="answer-panel-3">
+          <div class="answer-header">
+            <span class="answer-number">3</span>
+            <span class="answer-value" id="answer-value-3">0</span>
+          </div>
+          <div class="answer-text" id="answer-text-3">Hidden Answer</div>
+          <button class="reveal-button" data-answer="3">Reveal</button>
+        </article>
+        <article class="answer-card" id="answer-panel-4">
+          <div class="answer-header">
+            <span class="answer-number">4</span>
+            <span class="answer-value" id="answer-value-4">0</span>
+          </div>
+          <div class="answer-text" id="answer-text-4">Hidden Answer</div>
+          <button class="reveal-button" data-answer="4">Reveal</button>
+        </article>
+        <article class="answer-card" id="answer-panel-5">
+          <div class="answer-header">
+            <span class="answer-number">5</span>
+            <span class="answer-value" id="answer-value-5">0</span>
+          </div>
+          <div class="answer-text" id="answer-text-5">Hidden Answer</div>
+          <button class="reveal-button" data-answer="5">Reveal</button>
+        </article>
+        <article class="answer-card" id="answer-panel-6">
+          <div class="answer-header">
+            <span class="answer-number">6</span>
+            <span class="answer-value" id="answer-value-6">0</span>
+          </div>
+          <div class="answer-text" id="answer-text-6">Hidden Answer</div>
+          <button class="reveal-button" data-answer="6">Reveal</button>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="control-panel" aria-label="game controls">
+    <button id="start-round">Start Round</button>
+    <button id="reveal-all">Reveal All Answers</button>
+    <button id="next-round">Next Round</button>
+    <button id="reset-game">Reset Game</button>
+    <button id="return-home">Return Home</button>
+  </footer>
+</body>
+</html>
+
+
