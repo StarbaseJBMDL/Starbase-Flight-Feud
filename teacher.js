@@ -19,6 +19,20 @@ document.addEventListener('DOMContentLoaded', () => {
   let flashRow = null;
   let bannerTimer = null;
 
+  function resetBoardReveals() {
+    flashRow = null;
+    if (bannerTimer) {
+      window.clearTimeout(bannerTimer);
+      bannerTimer = null;
+    }
+    revealBanner.classList.remove('show');
+    const currentReveals = state.revealed || {};
+    if (Object.keys(currentReveals).length > 0) {
+      setState({ revealed: {} });
+      state = getState();
+    }
+  }
+
   function formatTime(totalSeconds) {
     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
     const seconds = String(totalSeconds % 60).padStart(2, '0');
@@ -152,13 +166,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   nextRoundBtn.addEventListener('click', () => {
     const nextRound = state.round < missionQuestions.length ? state.round + 1 : 1;
-    flashRow = null;
+    resetBoardReveals();
     setRound(nextRound);
     render();
   });
 
   resetGameBtn.addEventListener('click', () => {
-    flashRow = null;
+    resetBoardReveals();
     resetGameState();
     render();
   });
@@ -194,5 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 1000);
 
+  resetBoardReveals();
   render();
 });
