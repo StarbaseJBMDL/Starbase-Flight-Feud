@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const teamScores = document.getElementById('teamScores');
   const timerDisplay = document.getElementById('timerDisplay');
   const roundNav = document.getElementById('roundNav');
+  const totalPointsDisplay = document.getElementById('totalPointsDisplay');
+  const revealBanner = document.getElementById('revealBanner');
   const winnerBox = document.getElementById('winnerBox');
   const nextRoundBtn = document.getElementById('nextRoundBtn');
   const resetGameBtn = document.getElementById('resetGameBtn');
@@ -14,13 +16,45 @@ document.addEventListener('DOMContentLoaded', () => {
   const timerResetBtn = document.getElementById('timerResetBtn');
 
   let state = getState();
+  let flashRow = null;
+  let bannerTimer = null;
+
+  function formatTime(totalSeconds) {
+    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    return `${minutes}:${seconds}`;
+  }
+
+  function showRevealBanner() {
+    revealBanner.classList.remove('show');
+    void revealBanner.offsetWidth;
+    revealBanner.classList.add('show');
+    if (bannerTimer) {
+      window.clearTimeout(bannerTimer);
+    }
+    bannerTimer = window.setTimeout(() => {
+      revealBanner.classList.remove('show');
+    }, 900);
+  }
+
+  function getPointValue(index) {
+    return 30 - index * 5;
+  }
+
+  function getRevealedPoints(question, revealed) {
+    return question.answers.reduce((total, answer, idx) => {
+      return revealed[idx] ? total + getPointValue(idx) : total;
+    }, 0);
+  }
 
   function render() {
     state = getState();
     const currentQuestion = missionQuestions[state.questionIndex] || missionQuestions[0];
+    const revealedPoints = getRevealedPoints(currentQuestion, state.revealed || {});
     roundLabel.textContent = `Round ${state.round}`;
     questionBox.textContent = currentQuestion.prompt;
-    timerDisplay.textContent = state.timer;
+    timerDisplay.textContent = formatTime(state.timer);
+    totalPointsDisplay.textContent = revealedPoints;
     winnerBox.textContent = state.winner ? `Winner: ${state.winner}` : 'No winner declared';
 
     roundNav.innerHTML = '';
@@ -37,13 +71,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     answerBoard.innerHTML = '';
     currentQuestion.answers.forEach((answer, idx) => {
+      const pointValue = getPointValue(idx);
       const card = document.createElement('div');
-      card.className = `answer-card${state.revealed[idx] ? ' revealed' : ''}`;
-      card.innerHTML = `<div class="answer-index">${idx + 1}</div><div class="answer-text">${answer}</div><button class="reveal-btn">${state.revealed[idx] ? 'Revealed' : 'Reveal Answer'}</button>`;
+      const isRevealed = Boolean(state.revealed[idx]);
+      card.className = `answer-card${isRevealed ? ' revealed' : ''}${flashRow === idx ? ' flash' : ''}`;
+      card.innerHTML = `
+        <div class="row-number">${idx + 1}</div>
+        <div class="row-bar">
+          <span class="row-answer">${isRevealed ? answer : ''}</span>
+        </div>
+        <div class="row-points">${isRevealed ? pointValue : ''}</div>
+        <button class="reveal-btn">${isRevealed ? 'Revealed' : 'Reveal'}</button>
+      `;
       card.querySelector('.reveal-btn').addEventListener('click', () => {
+        if (state.revealed[idx]) {
+          render();
+          return;
+        }
+
         const nextRevealed = { ...state.revealed, [idx]: true };
         setState({ revealed: nextRevealed });
+        flashRow = idx;
+        showRevealBanner();
         render();
+        window.setTimeout(() => {
+          if (flashRow === idx) {
+            flashRow = null;
+            render();
+          }
+        }, 1000);
       });
       answerBoard.appendChild(card);
     });
@@ -56,30 +112,35 @@ document.addEventListener('DOMContentLoaded', () => {
       scoreCard.innerHTML = `
         <div class="team-topline">
           <div class="team-name">${displayName}</div>
-          <div class="strike-meter">${Array.from({ length: 3 }, (_, index) => `<span class="strike-dot${index < state.strikes[team] ? ' active' : ''}"></span>`).join('')}</div>
+          <div class="score-pill">${state.scores[team]}</div>
+        </div>
+        <div class="strike-row">
+          ${Array.from({ length: 3 }, (_, index) => `<span class="strike-slot${index < state.strikes[team] ? ' active' : ''}">X</span>`).join('')}
         </div>
         <div class="score-controls">
-          <button data-team="${team}" data-action="minus" class="score-btn">−</button>
-          <span class="score-number">${state.scores[team]}</span>
-          <button data-team="${team}" data-action="plus" class="score-btn">+</button>
+          <button data-team="${team}" data-action="plus10" class="score-btn">+10</button>
+          <button data-team="${team}" data-action="plus25" class="score-btn">+25</button>
+          <button data-team="${team}" data-action="plus50" class="score-btn">+50</button>
         </div>
         <div class="strike-controls">
-          <button data-team="${team}" data-action="strike-minus" class="strike-btn">Strike −</button>
-          <button data-team="${team}" data-action="strike-plus" class="strike-btn">Strike +</button>
+          <button data-team="${team}" data-action="strike-plus" class="strike-btn">Add Strike</button>
+          <button data-team="${team}" data-action="strike-clear" class="strike-btn clear">Clear Strikes</button>
         </div>
       `;
       scoreCard.querySelectorAll('button').forEach((button) => {
         button.addEventListener('click', () => {
           const scores = { ...state.scores };
           const strikes = { ...state.strikes };
-          if (button.dataset.action === 'plus') {
-            scores[team] += 1;
-          } else if (button.dataset.action === 'minus') {
-            scores[team] = Math.max(0, scores[team] - 1);
+          if (button.dataset.action === 'plus10') {
+            scores[team] += 10;
+          } else if (button.dataset.action === 'plus25') {
+            scores[team] += 25;
+          } else if (button.dataset.action === 'plus50') {
+            scores[team] += 50;
           } else if (button.dataset.action === 'strike-plus') {
             strikes[team] = Math.min(3, strikes[team] + 1);
-          } else if (button.dataset.action === 'strike-minus') {
-            strikes[team] = Math.max(0, strikes[team] - 1);
+          } else if (button.dataset.action === 'strike-clear') {
+            strikes[team] = 0;
           }
           setState({ scores, strikes });
           render();
@@ -91,11 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   nextRoundBtn.addEventListener('click', () => {
     const nextRound = state.round < missionQuestions.length ? state.round + 1 : 1;
+    flashRow = null;
     setRound(nextRound);
     render();
   });
 
   resetGameBtn.addEventListener('click', () => {
+    flashRow = null;
     resetGameState();
     render();
   });
@@ -119,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   timerResetBtn.addEventListener('click', () => {
-    setState({ timer: 60, timerRunning: false });
+    setState({ timer: 120, timerRunning: false });
     render();
   });
 

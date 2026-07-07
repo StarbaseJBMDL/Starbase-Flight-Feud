@@ -29,6 +29,24 @@
             </div>
             <div class="small-note">Projector ready • crew responses</div>
           </div>
+          <div class="mission-brief-card compact-brief">
+            <div class="brief-label">Current Round</div>
+            <div id="currentRoundLabel" class="brief-value">Round 1</div>
+          </div>
+          <p class="panel-copy">Mission prompt</p>
+          <div id="questionBox" class="question-box"></div>
+          <div id="roundNav" class="round-nav"></div>
+          <div class="board-header">
+            <div class="board-title-block">
+              <p class="eyebrow">Family Feud Board</p>
+              <h3>Mission Answers</h3>
+            </div>
+            <div class="total-points-card">
+              <div class="brief-label">Total Points</div>
+              <div id="totalPointsDisplay" class="total-points-value">0</div>
+            </div>
+          </div>
+          <div id="revealBanner" class="reveal-banner">ANSWER REVEALED</div>
           <div id="answerBoard" class="answer-grid"></div>
         </section>
 
@@ -41,30 +59,19 @@
           </div>
 
           <div class="control-stack">
-            <div class="control-block">
-              <h3>Mission Brief</h3>
-              <div class="mission-brief-card">
-                <div class="brief-label">Current Round</div>
-                <div id="currentRoundLabel" class="brief-value">Round 1</div>
-              </div>
-              <p class="panel-copy">Mission prompt</p>
-              <div id="questionBox" class="question-box"></div>
-              <div id="roundNav" class="round-nav"></div>
-            </div>
-
-            <div class="control-block">
-              <h3>Flight Teams</h3>
-              <div id="teamScores" class="team-grid"></div>
-            </div>
-
-            <div class="control-block timer-block">
-              <h3>Mission Timer</h3>
-              <div id="timerDisplay" class="timer-display">60</div>
+            <div class="control-block clock-block">
+              <h3>Mission Clock</h3>
+              <div id="timerDisplay" class="timer-display">02:00</div>
               <div class="button-row compact">
-                <button id="timerStartBtn" class="secondary-btn">Start Mission</button>
-                <button id="timerPauseBtn" class="secondary-btn">Pause</button>
-                <button id="timerResetBtn" class="secondary-btn">Reset</button>
+                <button id="timerStartBtn" class="secondary-btn">Start Clock</button>
+                <button id="timerPauseBtn" class="secondary-btn">Pause Clock</button>
+                <button id="timerResetBtn" class="secondary-btn">Reset Clock</button>
               </div>
+            </div>
+
+            <div class="control-block">
+              <h3>Mission Scoreboard</h3>
+              <div id="teamScores" class="team-grid"></div>
             </div>
 
             <div class="control-block">

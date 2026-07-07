@@ -2,7 +2,7 @@ const missionQuestions = [
   {
     round: 1,
     prompt: 'Name a tool used to measure length.',
-    answers: ['Ruler', 'Tape Measure', 'Meter Stick', 'Caliper', 'Yardstick', 'Laser Measure']
+    answers: ['Ruler', 'Tape Measure', 'Meter Stick', 'Caliper', 'Centimeter Tape', 'Laser Measure']
   },
   {
     round: 2,
