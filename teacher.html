@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mission Commander Console</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">STARBASE | Mission Commander</p>
+          <h1>Mission Commander Console</h1>
+          <p class="subtitle-inline">Flight Feud — Metric Measurement Mission</p>
+        </div>
+        <div class="header-actions">
+          <a class="ghost-link" href="index.html">Home</a>
+          <div class="status-pill"><span class="status-dot"></span> Systems online</div>
+        </div>
+      </header>
+
+      <main class="console-grid teacher-grid">
+        <section class="panel answer-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Answer board</p>
+              <h2>Reveal Answer</h2>
+            </div>
+            <div class="small-note">Projector ready • crew responses</div>
+          </div>
+          <div id="answerBoard" class="answer-grid"></div>
+        </section>
+
+        <aside class="panel controls-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Flight controls</p>
+              <h2>Mission Controls</h2>
+            </div>
+          </div>
+
+          <div class="control-stack">
+            <div class="control-block">
+              <h3>Mission Brief</h3>
+              <div class="mission-brief-card">
+                <div class="brief-label">Current Round</div>
+                <div id="currentRoundLabel" class="brief-value">Round 1</div>
+              </div>
+              <p class="panel-copy">Mission prompt</p>
+              <div id="questionBox" class="question-box"></div>
+              <div id="roundNav" class="round-nav"></div>
+            </div>
+
+            <div class="control-block">
+              <h3>Flight Teams</h3>
+              <div id="teamScores" class="team-grid"></div>
+            </div>
+
+            <div class="control-block timer-block">
+              <h3>Mission Timer</h3>
+              <div id="timerDisplay" class="timer-display">60</div>
+              <div class="button-row compact">
+                <button id="timerStartBtn" class="secondary-btn">Start Mission</button>
+                <button id="timerPauseBtn" class="secondary-btn">Pause</button>
+                <button id="timerResetBtn" class="secondary-btn">Reset</button>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <h3>Launch Sequence</h3>
+              <div class="button-row compact">
+                <button id="nextRoundBtn" class="gold-btn">Next Round</button>
+                <button id="resetGameBtn" class="secondary-btn">Reset Mission</button>
+              </div>
+              <button id="winnerBtn" class="gold-btn full">Declare Winner</button>
+              <div id="winnerBox" class="winner-box"></div>
+            </div>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="shared.js"></script>
+    <script src="teacher.js"></script>
+  </body>
+</html>

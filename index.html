@@ -1,31 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>STARBASE Flight Feud</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <main class="home-screen">
-    <section class="home-card">
-     <div class="mission-badge">🟢 SYSTEMS ONLINE</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STARBASE Mission Control</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="starfield"></div>
+    <main class="home-screen">
+      <section class="home-card">
+        <div class="hero-top">
+          <div class="mission-badge"><span class="status-dot"></span> Systems Online</div>
+          <div class="mission-badge alt"><span class="status-dot"></span> Projector Connected</div>
+        </div>
 
-<h1>STARBASE<br>MISSION CONTROL</h1>
+        <div class="hero-block">
+          <h1>STARBASE MISSION CONTROL</h1>
+          <p class="subtitle">Digital Mission Hub</p>
+          <p class="hero-copy">A polished launch bay for classroom missions, crew coordination, and high-energy team play.</p>
+        </div>
 
-<p class="tagline">
-    Operation: Flight Feud
-      </p>
+        <div class="home-grid">
+          <div class="panel mission-status-panel">
+            <h2>Mission Status</h2>
+            <ul class="status-list">
+              <li><span class="status-dot"></span> Systems Online</li>
+              <li><span class="status-dot"></span> Projector Connected</li>
+              <li><span class="status-dot"></span> Student Consoles Ready</li>
+       
+              <li><span class="status-dot"></span> 8 Crews Loaded</li>
+            </ul>
+          </div>
 
-      <div class="button-row">
-        <a class="main-button" href="teacher.html">Mission Commander Console</a>
-        <a class="main-button secondary" href="student.html">Mission Crew Console</a>
-      </div>
+          <div class="panel commander-panel">
+            <h2>Commander Welcome</h2>
+            <p>Mission Commander, the launch bay is clear and the crews are aligned. Start the mission from the Flight Feud console or guide the next crew from the student station.</p>
+            <a class="main-button secondary full-width" href="student.html">Student Console</a>
+          </div>
+        </div>
 
-      <p class="small-note">
-        Teams: Alpha, Bravo, Charlie, Delta, Echo, Foxtrot, Golf, and Hotel
-      </p>
-    </section>
-  </main>
-</body>
+        <div class="mission-grid">
+          <a class="mission-card active" href="teacher.html">
+            <span class="card-badge">Active</span>
+            <h3>Flight Feud</h3>
+            <p>Launch the teacher console for the metric measurement mission.</p>
+          </a>
+          <div class="mission-card pending">
+            <span class="card-badge">Coming Soon</span>
+            <h3>Energy Match</h3>
+            <p>Balance power, solve systems, and outthink the mission grid.</p>
+          </div>
+          <div class="mission-card pending">
+            <span class="card-badge">Coming Soon</span>
+            <h3>GPS Adventure</h3>
+            <p>Plot waypoints, navigate the route, and reach the destination.</p>
+          </div>
+          <div class="mission-card pending">
+            <span class="card-badge">Coming Soon</span>
+            <h3>Metric Master</h3>
+            <p>Measure, compare, and complete challenge rounds with precision.</p>
+          </div>
+          <div class="mission-card pending">
+            <span class="card-badge">Coming Soon</span>
+            <h3>Engineering Challenge</h3>
+            <p>Repair systems, solve faults, and protect the mission.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
 </html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mission Crew Console</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell student-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">STARBASE | Mission Crew</p>
+          <h1>Mission Crew Console</h1>
+        </div>
+        <a class="ghost-link" href="index.html">Home</a>
+      </header>
+
+      <main class="student-grid">
+        <section class="panel student-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Crew status</p>
+              <h2>Transmit your answer</h2>
+            </div>
+            <div id="studentStatus" class="status-tag">Ready for launch</div>
+          </div>
+
+          <label class="field-label" for="teamSelect">Select team</label>
+          <select id="teamSelect" class="input-field"></select>
+
+          <label class="field-label" for="currentQuestion">Current question</label>
+          <div id="currentQuestion" class="question-box compact"></div>
+
+          <label class="field-label" for="answerInput">Your answer</label>
+          <textarea id="answerInput" class="input-field answer-input" rows="4" placeholder="Type your crew's answer here"></textarea>
+
+          <button id="submitAnswerBtn" class="gold-btn full">Submit answer</button>
+          <div id="transmissionMessage" class="success-box">Transmission received.</div>
+        </section>
+      </main>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="shared.js"></script>
+    <script src="student.js"></script>
+  </body>
+</html>
