@@ -8,6 +8,11 @@
   </head>
   <body>
     <div class="starfield"></div>
+    <header class="app-topbar">
+  <div class="brand-mark">⭐ STARBASE JBMDL</div>
+  <div class="system-pill">🟢 SYSTEMS ONLINE</div>
+  <div class="version-tag">Mission Control v1.0</div>
+</header>
     <main class="home-screen">
       <section class="home-card">
         <div class="hero-top">
@@ -69,5 +74,63 @@
         </div>
       </section>
     </main>
+    <footer class="app-footer">
+  <span>STARBASE JBMDL Mission Control</span>
+  <span>Instructor Demo Build</span>
+  <span>Version 1.0</span>
+</footer>
   </body>
 </html>
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  background: rgba(2, 8, 23, 0.92);
+  border-bottom: 2px solid rgba(77, 195, 255, 0.55);
+  box-shadow: 0 0 24px rgba(77, 195, 255, 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.brand-mark,
+.version-tag,
+.system-pill {
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.brand-mark {
+  color: #ffd54f;
+}
+
+.version-tag {
+  color: #9fbfff;
+  font-size: 0.9rem;
+}
+
+.system-pill {
+  color: #7cff8a;
+  border: 1px solid rgba(124, 255, 138, 0.6);
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: rgba(20, 80, 45, 0.35);
+  box-shadow: 0 0 16px rgba(124, 255, 138, 0.25);
+}
+
+.app-footer {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  padding: 18px;
+  color: #9fbfff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  background: rgba(2, 8, 23, 0.92);
+  border-top: 1px solid rgba(77, 195, 255, 0.35);
+}
