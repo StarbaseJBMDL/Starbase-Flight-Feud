@@ -397,6 +397,124 @@ h1 {
   transform: translate(-50%, 0);
 }
 
+.launch-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(2, 8, 23, 0.9);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease;
+}
+
+.launch-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.launch-overlay.closing {
+  opacity: 0;
+}
+
+.launch-overlay.hidden {
+  display: none;
+}
+
+.launch-card {
+  width: min(760px, 92vw);
+  padding: 36px 32px;
+  border-radius: 28px;
+  border: 2px solid rgba(91, 199, 255, 0.75);
+  background: rgba(3, 13, 32, 0.96);
+  box-shadow: 0 0 30px rgba(91, 199, 255, 0.2), inset 0 0 20px rgba(91, 199, 255, 0.08);
+  text-align: center;
+}
+
+.launch-eyebrow {
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.launch-title {
+  margin: 0 0 8px;
+  font-size: clamp(34px, 4.8vw, 56px);
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(255, 213, 79, 0.2);
+}
+
+.launch-subtitle {
+  margin: 0 0 24px;
+  color: var(--soft-white);
+  font-size: 20px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.launch-checklist {
+  display: grid;
+  gap: 10px;
+  margin: 0 auto 20px;
+  max-width: 420px;
+}
+
+.launch-check-item {
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(91, 199, 255, 0.35);
+  background: rgba(6, 24, 52, 0.86);
+  color: var(--soft-white);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.launch-check-item.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.launch-countdown {
+  min-height: 110px;
+  display: grid;
+  place-items: center;
+  font-size: clamp(82px, 12vw, 132px);
+  font-weight: 900;
+  color: var(--gold);
+  text-shadow: 0 0 18px rgba(255, 213, 79, 0.3);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.launch-countdown.show {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.launch-final {
+  margin-top: 8px;
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.launch-final.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .answer-grid {
   display: grid;
   gap: 12px;

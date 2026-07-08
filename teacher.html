@@ -80,12 +80,24 @@
                 <button id="nextRoundBtn" class="gold-btn">Next Round</button>
                 <button id="resetGameBtn" class="secondary-btn">Reset Mission</button>
               </div>
+              <button id="startMissionBtn" class="gold-btn full">Start Mission</button>
               <button id="winnerBtn" class="gold-btn full">Declare Winner</button>
               <div id="winnerBox" class="winner-box"></div>
             </div>
           </div>
         </aside>
       </main>
+    </div>
+
+    <div id="launchOverlay" class="launch-overlay hidden" aria-live="polite">
+      <div class="launch-card">
+        <div class="launch-eyebrow">STARBASE | Mission Control</div>
+        <h2 id="launchTitle" class="launch-title">STARBASE MISSION CONTROL</h2>
+        <p id="launchSubtitle" class="launch-subtitle">Initializing Systems</p>
+        <div id="launchChecklist" class="launch-checklist"></div>
+        <div id="launchCountdown" class="launch-countdown"></div>
+        <div id="launchFinal" class="launch-final">MISSION LAUNCHED</div>
+      </div>
     </div>
 
     <script src="questions.js"></script>

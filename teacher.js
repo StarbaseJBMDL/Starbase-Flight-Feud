@@ -11,9 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const nextRoundBtn = document.getElementById('nextRoundBtn');
   const resetGameBtn = document.getElementById('resetGameBtn');
   const winnerBtn = document.getElementById('winnerBtn');
+  const startMissionBtn = document.getElementById('startMissionBtn');
   const timerStartBtn = document.getElementById('timerStartBtn');
   const timerPauseBtn = document.getElementById('timerPauseBtn');
   const timerResetBtn = document.getElementById('timerResetBtn');
+  const launchOverlay = document.getElementById('launchOverlay');
+  const launchTitle = document.getElementById('launchTitle');
+  const launchSubtitle = document.getElementById('launchSubtitle');
+  const launchChecklist = document.getElementById('launchChecklist');
+  const launchCountdown = document.getElementById('launchCountdown');
+  const launchFinal = document.getElementById('launchFinal');
 
   let state = getState();
   let flashRow = null;
@@ -37,6 +44,59 @@ document.addEventListener('DOMContentLoaded', () => {
     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
     const seconds = String(totalSeconds % 60).padStart(2, '0');
     return `${minutes}:${seconds}`;
+  }
+
+  function wait(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+  }
+
+  async function runLaunchSequence() {
+    if (launchOverlay.classList.contains('active')) {
+      return;
+    }
+
+    launchOverlay.classList.remove('hidden', 'closing');
+    launchOverlay.classList.add('active');
+    launchChecklist.innerHTML = '';
+    launchCountdown.textContent = '';
+    launchFinal.classList.remove('show');
+    launchTitle.textContent = 'STARBASE MISSION CONTROL';
+    launchSubtitle.textContent = 'Initializing Systems';
+    startMissionBtn.disabled = true;
+
+    const checklistItems = [
+      'Systems Online',
+      'Projector Connected',
+      'Student Consoles Ready',
+      'Mission Clock Ready',
+      'Flight Feud Loaded'
+    ];
+
+    for (const item of checklistItems) {
+      const row = document.createElement('div');
+      row.className = 'launch-check-item';
+      row.textContent = item;
+      launchChecklist.appendChild(row);
+      await wait(500);
+      row.classList.add('show');
+    }
+
+    for (let count = 5; count >= 1; count -= 1) {
+      launchCountdown.textContent = String(count);
+      launchCountdown.classList.add('show');
+      await wait(700);
+      launchCountdown.classList.remove('show');
+    }
+
+    launchCountdown.textContent = '';
+    launchFinal.classList.add('show');
+    await wait(1100);
+
+    launchOverlay.classList.add('closing');
+    await wait(700);
+    launchOverlay.classList.remove('active', 'closing');
+    launchOverlay.classList.add('hidden');
+    startMissionBtn.disabled = false;
   }
 
   function showRevealBanner() {
@@ -175,6 +235,10 @@ document.addEventListener('DOMContentLoaded', () => {
     resetBoardReveals();
     resetGameState();
     render();
+  });
+
+  startMissionBtn.addEventListener('click', () => {
+    runLaunchSequence();
   });
 
   winnerBtn.addEventListener('click', () => {
