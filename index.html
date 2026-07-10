@@ -8,9 +8,16 @@
   </head>
   <body>
     <div class="starfield"></div>
-    <header class="app-topbar">
+<header class="app-topbar">
   <div class="brand-mark">⭐ STARBASE JBMDL</div>
+
   <div class="system-pill">🟢 SYSTEMS ONLINE</div>
+
+  <div class="mission-clock">
+    <span id="live-time">--:--:--</span>
+    <span id="live-date">Mission Date Loading...</span>
+  </div>
+
   <div class="version-tag">Mission Control v1.0</div>
 </header>
     <main class="home-screen">
@@ -28,7 +35,7 @@
 
         <div class="home-grid">
           <div class="panel mission-status-panel">
-            <h2>Mission Status</h2>
+            <h2>SYSTEM STATUS</h2>
             <ul class="status-list">
               <li><span class="status-dot"></span> Systems Online</li>
               <li><span class="status-dot"></span> Projector Connected</li>
@@ -39,27 +46,34 @@
           </div>
 
           <div class="panel commander-panel">
-            <h2>Commander Welcome</h2>
-            <p>Mission Commander, the launch bay is clear and the crews are aligned. Start the mission from the Flight Feud console or guide the next crew from the student station.</p>
-            <a class="main-button secondary full-width" href="student.html">Student Console</a>
+            <h2>MISSION BRIEF</h2>
+           <p>
+<strong>Instructor:</strong> nOVA<br><br>
+
+<strong>Mission:</strong> Flight Feud<br><br>
+
+<strong>Crew Status:</strong> 8 Active Teams<br><br>
+
+<strong>Objective:</strong> Complete all five rounds, reveal every answer, and determine the winning crew.
+</p>
           </div>
         </div>
 
         <div class="mission-grid">
           <a class="mission-card active" href="teacher.html">
             <span class="card-badge">Active</span>
-            <h3>Flight Feud</h3>
-            <p>Launch the teacher console for the metric measurement mission.</p>
+            <h3>🚀 FLIGHT FEUD</h3>
+           <p>Instructor control center for live classroom Family Feud gameplay.</p>
           </a>
           <div class="mission-card pending">
             <span class="card-badge">Coming Soon</span>
-            <h3>Energy Match</h3>
-            <p>Balance power, solve systems, and outthink the mission grid.</p>
+            <h3>⚡ ENERGY MATCH</h3>
+           <p>Status: Development (70% Complete)</p>
           </div>
           <div class="mission-card pending">
             <span class="card-badge">Coming Soon</span>
-            <h3>GPS Adventure</h3>
-            <p>Plot waypoints, navigate the route, and reach the destination.</p>
+            <h3>🛰 GPS ADVENTURE</h3>
+            <<p>Status: Planning Phase</p>
           </div>
           <div class="mission-card pending">
             <span class="card-badge">Coming Soon</span>
@@ -68,7 +82,7 @@
           </div>
           <div class="mission-card pending">
             <span class="card-badge">Coming Soon</span>
-            <h3>Engineering Challenge</h3>
+            <h3>ENGINEERING CHALLENGE PROTOTYPE</h3>
             <p>Repair systems, solve faults, and protect the mission.</p>
           </div>
         </div>
@@ -79,58 +93,28 @@
   <span>Instructor Demo Build</span>
   <span>Version 1.0</span>
 </footer>
+<script>
+function updateMissionClock() {
+    const now = new Date();
+
+    document.getElementById("live-time").textContent =
+        now.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        });
+
+    document.getElementById("live-date").textContent =
+        now.toLocaleDateString([], {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        });
+}
+
+updateMissionClock();
+setInterval(updateMissionClock, 1000);
+</script>
   </body>
 </html>
-.app-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 24px;
-  background: rgba(2, 8, 23, 0.92);
-  border-bottom: 2px solid rgba(77, 195, 255, 0.55);
-  box-shadow: 0 0 24px rgba(77, 195, 255, 0.25);
-  backdrop-filter: blur(10px);
-}
-
-.brand-mark,
-.version-tag,
-.system-pill {
-  font-weight: 900;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-
-.brand-mark {
-  color: #ffd54f;
-}
-
-.version-tag {
-  color: #9fbfff;
-  font-size: 0.9rem;
-}
-
-.system-pill {
-  color: #7cff8a;
-  border: 1px solid rgba(124, 255, 138, 0.6);
-  border-radius: 999px;
-  padding: 8px 14px;
-  background: rgba(20, 80, 45, 0.35);
-  box-shadow: 0 0 16px rgba(124, 255, 138, 0.25);
-}
-
-.app-footer {
-  display: flex;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
-  padding: 18px;
-  color: #9fbfff;
-  font-weight: 700;
-  letter-spacing: 1px;
-  background: rgba(2, 8, 23, 0.92);
-  border-top: 1px solid rgba(77, 195, 255, 0.35);
-}

@@ -6,6 +6,7 @@
     <title>Mission Crew Console</title>
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <div class="app-shell student-shell">
       <header class="topbar">
@@ -13,31 +14,78 @@
           <p class="eyebrow">STARBASE | Mission Crew</p>
           <h1>Mission Crew Console</h1>
         </div>
-        <a class="ghost-link" href="index.html">Home</a>
+
+        <div class="topbar-actions">
+          <span class="system-pill">● Systems Online</span>
+          <a class="ghost-link" href="index.html">Mission Hub</a>
+        </div>
       </header>
 
-      <main class="student-grid">
+      <main class="student-console-layout">
         <section class="panel student-panel">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Crew status</p>
-              <h2>Transmit your answer</h2>
+              <p class="eyebrow">Crew transmission station</p>
+              <h2>Send Your Answer</h2>
             </div>
-            <div id="studentStatus" class="status-tag">Ready for launch</div>
+
+            <div id="studentStatus" class="status-tag">CREW READY</div>
           </div>
 
-          <label class="field-label" for="teamSelect">Select team</label>
-          <select id="teamSelect" class="input-field"></select>
+          <div class="student-form-grid">
+            <div class="form-group">
+              <label class="field-label" for="teamSelect">Select Crew</label>
+              <select id="teamSelect" class="input-field"></select>
+            </div>
 
-          <label class="field-label" for="currentQuestion">Current question</label>
-          <div id="currentQuestion" class="question-box compact"></div>
+            <div class="form-group">
+              <label class="field-label" for="currentQuestion">
+                Current Mission Question
+              </label>
 
-          <label class="field-label" for="answerInput">Your answer</label>
-          <textarea id="answerInput" class="input-field answer-input" rows="4" placeholder="Type your crew's answer here"></textarea>
+              <div id="currentQuestion" class="question-box compact"></div>
+            </div>
 
-          <button id="submitAnswerBtn" class="gold-btn full">Submit answer</button>
-          <div id="transmissionMessage" class="success-box">Transmission received.</div>
+            <div class="form-group">
+              <label class="field-label" for="answerInput">
+                Crew Answer
+              </label>
+
+              <textarea
+                id="answerInput"
+                class="input-field answer-input"
+                rows="5"
+                placeholder="Type your crew's answer here"
+              ></textarea>
+            </div>
+
+            <button id="submitAnswerBtn" class="gold-btn full">
+              Submit Answer
+            </button>
+
+            <div id="transmissionMessage" class="success-box" aria-live="polite">
+              Transmission sent to Mission Control. Awaiting approval.
+            </div>
+          </div>
         </section>
+
+        <aside class="panel student-info-panel">
+          <p class="eyebrow">Mission Instructions</p>
+          <h2>How to Play</h2>
+
+          <ol class="mission-instructions">
+            <li>Select your crew.</li>
+            <li>Read the current mission question.</li>
+            <li>Type one answer.</li>
+            <li>Submit your transmission.</li>
+            <li>Wait for Mission Control approval.</li>
+          </ol>
+
+          <div class="student-status-card">
+            <span>Transmission Status</span>
+            <strong>Ready</strong>
+          </div>
+        </aside>
       </main>
     </div>
 
