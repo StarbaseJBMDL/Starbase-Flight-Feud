@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mission Commander Console</title>
+
+    <title>Flight Feud | Mission Commander Console</title>
+
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
     <div class="app-shell teacher-shell">
+      <!-- =========================================
+           TOP BAR
+      ========================================== -->
       <header class="topbar">
         <div>
           <p class="eyebrow">STARBASE | Mission Commander</p>
@@ -18,12 +23,29 @@
 
         <div class="topbar-actions">
           <span class="system-pill">● Systems Online</span>
-          <a class="ghost-link" href="index.html">Mission Hub</a>
+
+          <a
+            class="ghost-link"
+            href="student.html"
+            target="_blank"
+            rel="noopener"
+          >
+            Student Console
+          </a>
+
+          <a class="ghost-link" href="index.html">
+            Mission Hub
+          </a>
         </div>
       </header>
 
+      <!-- =========================================
+           MAIN TEACHER CONSOLE
+      ========================================== -->
       <main class="teacher-console-layout">
+        <!-- LEFT SIDE: GAME BOARD -->
         <section class="teacher-main-column">
+          <!-- Mission HUD -->
           <section class="panel mission-hud">
             <div class="hud-item">
               <span>Round</span>
@@ -42,21 +64,29 @@
 
             <div class="hud-item">
               <span>Mission Status</span>
-              <strong id="winnerBox">No winner declared</strong>
+              <strong id="winnerBox">Mission in progress</strong>
             </div>
           </section>
 
+          <!-- Current Question -->
           <section class="panel mission-question-panel">
             <div class="panel-header">
               <div>
                 <p class="eyebrow">Mission Brief</p>
-                <h2 id="questionBox">Loading mission question...</h2>
+                <h2 id="questionBox">
+                  Loading mission question...
+                </h2>
               </div>
             </div>
 
-            <div id="roundNav" class="round-nav"></div>
+            <div
+              id="roundNav"
+              class="round-nav"
+              aria-label="Round selection"
+            ></div>
           </section>
 
+          <!-- Family Feud Answer Board -->
           <section class="panel answer-board-panel">
             <div class="panel-header">
               <div>
@@ -64,29 +94,42 @@
                 <h2>Survey Answers</h2>
               </div>
 
-              <div id="revealBanner" class="reveal-banner">
+              <div
+                id="revealBanner"
+                class="reveal-banner"
+                aria-live="polite"
+              >
                 Answer Revealed
               </div>
             </div>
 
-            <div id="answerBoard" class="answer-board"></div>
+            <div
+              id="answerBoard"
+              class="answer-board"
+              aria-live="polite"
+            ></div>
           </section>
 
+          <!-- Revealed Answers / Mission History -->
           <section class="panel approved-responses-panel">
             <div class="panel-header">
               <div>
-                <p class="eyebrow">Projector Feed</p>
-                <h2>Approved Crew Responses</h2>
+                <p class="eyebrow">Mission History</p>
+                <h2>Revealed Answers & Strikes</h2>
               </div>
             </div>
 
-            <div id="approvedList" class="approved-list">
-              <p class="empty-note">No approved responses yet.</p>
+            <div id="revealedList" class="approved-list">
+              <p class="empty-note">
+                No answers revealed yet.
+              </p>
             </div>
           </section>
         </section>
 
+        <!-- RIGHT SIDE: TEACHER CONTROLS -->
         <aside class="teacher-sidebar">
+          <!-- Game Controls -->
           <section class="panel controls-panel">
             <div class="panel-header">
               <div>
@@ -95,7 +138,11 @@
               </div>
             </div>
 
-            <button id="startMissionBtn" class="gold-btn full">
+            <button
+              id="startMissionBtn"
+              type="button"
+              class="gold-btn full"
+            >
               Start Mission
             </button>
 
@@ -103,9 +150,29 @@
               <span class="control-label">Mission Clock</span>
 
               <div class="button-row">
-                <button id="timerStartBtn" class="control-btn">Start</button>
-                <button id="timerPauseBtn" class="control-btn">Pause</button>
-                <button id="timerResetBtn" class="control-btn">Reset</button>
+                <button
+                  id="timerStartBtn"
+                  type="button"
+                  class="control-btn"
+                >
+                  Start
+                </button>
+
+                <button
+                  id="timerPauseBtn"
+                  type="button"
+                  class="control-btn"
+                >
+                  Pause
+                </button>
+
+                <button
+                  id="timerResetBtn"
+                  type="button"
+                  class="control-btn"
+                >
+                  Reset
+                </button>
               </div>
             </div>
 
@@ -113,34 +180,102 @@
               <span class="control-label">Round Control</span>
 
               <div class="button-stack">
-                <button id="nextRoundBtn" class="control-btn full">
+                <button
+                  id="nextRoundBtn"
+                  type="button"
+                  class="control-btn full"
+                >
                   Next Round
                 </button>
 
-                <button id="resetGameBtn" class="danger-btn full">
+                <button
+                  id="resetGameBtn"
+                  type="button"
+                  class="danger-btn full"
+                >
                   Reset Game
                 </button>
 
-                <button id="winnerBtn" class="gold-btn full">
+                <button
+                  id="winnerBtn"
+                  type="button"
+                  class="gold-btn full"
+                >
                   Declare Winner
                 </button>
               </div>
             </div>
           </section>
 
+          <!-- Incoming Student Answers -->
           <section class="panel transmissions-panel">
             <div class="panel-header">
               <div>
                 <p class="eyebrow">Incoming Crew Answers</p>
-                <h2>Crew Transmissions</h2>
+                <h2>Pending Transmissions</h2>
               </div>
+
+              <span
+                id="pendingCount"
+                class="status-tag"
+              >
+                0 Pending
+              </span>
             </div>
 
-            <div id="transmissionsList" class="transmissions-list">
-              <p class="empty-note">No pending transmissions.</p>
+            <div
+              id="transmissionsList"
+              class="transmissions-list"
+              aria-live="polite"
+            >
+              <p class="empty-note">
+                No pending crew transmissions.
+              </p>
             </div>
           </section>
 
+          <!-- Approved Answers Waiting for Reveal -->
+          <section class="panel approved-queue-panel">
+            <div class="panel-header">
+              <div>
+                <p class="eyebrow">Approved Responses</p>
+                <h2>Waiting to Reveal</h2>
+              </div>
+
+              <span
+                id="approvedWaitingCount"
+                class="status-tag"
+              >
+                0 Waiting
+              </span>
+            </div>
+
+            <div
+              id="approvedWaitingList"
+              class="approved-list"
+              aria-live="polite"
+            >
+              <p class="empty-note">
+                No approved answers waiting.
+              </p>
+            </div>
+
+            <button
+              id="launchAnswerBtn"
+              type="button"
+              class="gold-btn full launch-answer-btn"
+              disabled
+            >
+              Launch Next Answer
+            </button>
+
+            <p class="launch-answer-note">
+              Approve every crew that submitted the same answer before
+              launching it onto the board.
+            </p>
+          </section>
+
+          <!-- Crew Scoreboard -->
           <section class="panel scoreboard-panel">
             <div class="panel-header">
               <div>
@@ -155,18 +290,83 @@
       </main>
     </div>
 
-    <div id="launchOverlay" class="launch-overlay hidden">
-      <div class="launch-content">
-        <p class="eyebrow">STARBASE Mission Control</p>
-        <h2 id="launchTitle">Initializing Systems</h2>
-        <p id="launchSubtitle">Preparing Flight Feud</p>
+    <!-- =========================================
+         FULL-SCREEN STRIKE EFFECT
+    ========================================== -->
+    <div
+      id="strikeOverlay"
+      class="strike-overlay hidden"
+      aria-hidden="true"
+    >
+      <div class="strike-overlay-x">X</div>
+      <p>Incorrect Transmission</p>
+    </div>
 
-        <div id="launchChecklist" class="launch-checklist"></div>
-        <div id="launchCountdown" class="launch-countdown"></div>
-        <div id="launchFinal" class="launch-final">MISSION LAUNCHED</div>
+    <!-- =========================================
+         ANSWER LAUNCH EFFECT
+    ========================================== -->
+    <div
+      id="answerLaunchOverlay"
+      class="answer-launch-overlay hidden"
+      aria-hidden="true"
+    >
+      <div class="answer-launch-content">
+        <p class="eyebrow">Mission Control</p>
+        <h2 id="answerLaunchTitle">Launching Answer</h2>
+
+        <div
+          id="answerLaunchCountdown"
+          class="answer-launch-countdown"
+        ></div>
+
+        <div
+          id="answerLaunchFinal"
+          class="answer-launch-final"
+        >
+          Transmission Confirmed
+        </div>
       </div>
     </div>
 
+    <!-- =========================================
+         MISSION START OVERLAY
+    ========================================== -->
+    <div
+      id="launchOverlay"
+      class="launch-overlay hidden"
+      aria-hidden="true"
+    >
+      <div class="launch-content">
+        <p class="eyebrow">STARBASE Mission Control</p>
+
+        <h2 id="launchTitle">
+          Initializing Systems
+        </h2>
+
+        <p id="launchSubtitle">
+          Preparing Flight Feud
+        </p>
+
+        <div
+          id="launchChecklist"
+          class="launch-checklist"
+        ></div>
+
+        <div
+          id="launchCountdown"
+          class="launch-countdown"
+        ></div>
+
+        <div
+          id="launchFinal"
+          class="launch-final"
+        >
+          Mission Launched
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts must stay in this order -->
     <script src="questions.js"></script>
     <script src="shared.js"></script>
     <script src="teacher.js"></script>

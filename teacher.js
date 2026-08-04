@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
+  /* =========================================
+     PAGE ELEMENTS
+  ========================================= */
+
   const roundLabel = document.getElementById("currentRoundLabel");
   const questionBox = document.getElementById("questionBox");
   const answerBoard = document.getElementById("answerBoard");
@@ -9,36 +13,87 @@ document.addEventListener("DOMContentLoaded", () => {
   const revealBanner = document.getElementById("revealBanner");
   const winnerBox = document.getElementById("winnerBox");
 
-  const nextRoundBtn = document.getElementById("nextRoundBtn");
-  const resetGameBtn = document.getElementById("resetGameBtn");
-  const winnerBtn = document.getElementById("winnerBtn");
-  const startMissionBtn = document.getElementById("startMissionBtn");
+  const pendingCount = document.getElementById("pendingCount");
+  const approvedWaitingCount =
+    document.getElementById("approvedWaitingCount");
 
-  const timerStartBtn = document.getElementById("timerStartBtn");
-  const timerPauseBtn = document.getElementById("timerPauseBtn");
-  const timerResetBtn = document.getElementById("timerResetBtn");
+  const transmissionsList =
+    document.getElementById("transmissionsList");
 
-  const transmissionsList = document.getElementById("transmissionsList");
-  const approvedList = document.getElementById("approvedList");
+  const approvedWaitingList =
+    document.getElementById("approvedWaitingList");
 
-  const launchOverlay = document.getElementById("launchOverlay");
-  const launchTitle = document.getElementById("launchTitle");
-  const launchSubtitle = document.getElementById("launchSubtitle");
-  const launchChecklist = document.getElementById("launchChecklist");
-  const launchCountdown = document.getElementById("launchCountdown");
-  const launchFinal = document.getElementById("launchFinal");
+  const revealedList =
+    document.getElementById("revealedList");
+
+  const launchAnswerBtn =
+    document.getElementById("launchAnswerBtn");
+
+  const nextRoundBtn =
+    document.getElementById("nextRoundBtn");
+
+  const resetGameBtn =
+    document.getElementById("resetGameBtn");
+
+  const winnerBtn =
+    document.getElementById("winnerBtn");
+
+  const startMissionBtn =
+    document.getElementById("startMissionBtn");
+
+  const timerStartBtn =
+    document.getElementById("timerStartBtn");
+
+  const timerPauseBtn =
+    document.getElementById("timerPauseBtn");
+
+  const timerResetBtn =
+    document.getElementById("timerResetBtn");
+
+  const strikeOverlay =
+    document.getElementById("strikeOverlay");
+
+  const answerLaunchOverlay =
+    document.getElementById("answerLaunchOverlay");
+
+  const answerLaunchTitle =
+    document.getElementById("answerLaunchTitle");
+
+  const answerLaunchCountdown =
+    document.getElementById("answerLaunchCountdown");
+
+  const answerLaunchFinal =
+    document.getElementById("answerLaunchFinal");
+
+  const launchOverlay =
+    document.getElementById("launchOverlay");
+
+  const launchTitle =
+    document.getElementById("launchTitle");
+
+  const launchSubtitle =
+    document.getElementById("launchSubtitle");
+
+  const launchChecklist =
+    document.getElementById("launchChecklist");
+
+  const launchCountdown =
+    document.getElementById("launchCountdown");
+
+  const launchFinal =
+    document.getElementById("launchFinal");
 
   const awardValues = [5, 12, 18, 22, 28];
+  const boardPointValues = [28, 22, 18, 12, 8, 5];
 
   let state = getState();
   let flashRow = null;
   let bannerTimer = null;
+  let launchInProgress = false;
 
-  function formatTime(totalSeconds) {
-    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
-    const seconds = String(totalSeconds % 60).padStart(2, "0");
-    return `${minutes}:${seconds}`;
-  }
+  /* =========================================
+     GENERAL HELPERS
+  ========================================= */
 
   function wait(milliseconds) {
     return new Promise((resolve) => {
@@ -46,30 +101,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function normalizeAnswer(value) {
-    return String(value)
-      .toLowerCase()
-      .replace(/[^\w\s]/g, "")
-      .replace(/^(a|an|the)\s+/i, "")
-      .replace(/\s+/g, " ")
-      .trim();
+  function formatTime(totalSeconds) {
+    const minutes = String(
+      Math.floor(totalSeconds / 60)
+    ).padStart(2, "0");
+
+    const seconds = String(
+      totalSeconds % 60
+    ).padStart(2, "0");
+
+    return `${minutes}:${seconds}`;
   }
 
-  function findMatchingAnswerIndex(studentAnswer, answers) {
-    const submitted = normalizeAnswer(studentAnswer);
-
-    return answers.findIndex((answer) => {
-      const boardAnswer = normalizeAnswer(answer);
-
-      return (
-        submitted === boardAnswer ||
-        submitted.includes(boardAnswer) ||
-        boardAnswer.includes(submitted)
-      );
-    });
+  function getBoardPointValue(index) {
+    return boardPointValues[index] ?? 5;
   }
 
-  function showRevealBanner(message = "ANSWER REVEALED") {
+  function calculateBoardPoints(question, revealed) {
+    return question.answers.reduce(
+      (total, answer, index) => {
+        if (!revealed[index]) {
+          return total;
+        }
+
+        return total + getBoardPointValue(index);
+      },
+      0
+    );
+  }
+
+  function showRevealBanner(message) {
     revealBanner.textContent = message;
     revealBanner.classList.remove("show");
 
@@ -83,118 +144,234 @@ document.addEventListener("DOMContentLoaded", () => {
 
     bannerTimer = window.setTimeout(() => {
       revealBanner.classList.remove("show");
-    }, 1200);
+    }, 1400);
   }
 
-  function calculateBoardPoints(question, revealed) {
-    return question.answers.reduce((total, answer, index) => {
-      if (!revealed[index]) {
-        return total;
-      }
+  function showStrikeOverlay(teamName) {
+    if (!strikeOverlay) {
+      return;
+    }
 
-      return total + getBoardPointValue(index);
-    }, 0);
+    const message = strikeOverlay.querySelector("p");
+
+    if (message) {
+      message.textContent =
+        `${teamName.toUpperCase()} CREW STRIKE`;
+    }
+
+    strikeOverlay.classList.remove("hidden", "show");
+    strikeOverlay.style.display = "grid";
+    strikeOverlay.style.visibility = "visible";
+    strikeOverlay.style.opacity = "1";
+
+    void strikeOverlay.offsetWidth;
+
+    strikeOverlay.classList.add("show");
+
+    window.setTimeout(() => {
+      strikeOverlay.classList.remove("show");
+      strikeOverlay.style.opacity = "0";
+
+      window.setTimeout(() => {
+        strikeOverlay.style.display = "none";
+        strikeOverlay.classList.add("hidden");
+      }, 250);
+    }, 1500);
   }
 
-  function getBoardPointValue(index) {
-    const pointScale = [28, 22, 18, 12, 5];
-    return pointScale[index] ?? 5;
-  }
+  /* =========================================
+     AUTOMATIC LATE-DUPLICATE STRIKES
+  ========================================= */
 
-  function revealBoardAnswer(index) {
+  function processLateDuplicateAnswers() {
     state = getState();
 
-    if (state.revealed[index]) {
+    const pending = getPendingTransmissions().filter(
+      (item) =>
+        Number(item.round) === Number(state.round)
+    );
+
+    if (pending.length === 0) {
+      return;
+    }
+
+    const transmissions = getTransmissions();
+    const strikes = { ...state.strikes };
+
+    let transmissionsChanged = false;
+    let strikesChanged = false;
+
+    pending.forEach((pendingItem) => {
+      if (!isAnswerAlreadyRevealed(pendingItem.answer)) {
+        return;
+      }
+
+      const storedItem = transmissions.find(
+        (item) =>
+          String(item.id) === String(pendingItem.id)
+      );
+
+      if (!storedItem || storedItem.status !== "pending") {
+        return;
+      }
+
+      storedItem.status = "rejected";
+      storedItem.pointsAwarded = 0;
+      storedItem.rejectionReason = "already-revealed";
+      storedItem.approvedAt = new Date().toISOString();
+
+      strikes[storedItem.teamName] = Math.min(
+        3,
+        (strikes[storedItem.teamName] || 0) + 1
+      );
+
+      transmissionsChanged = true;
+      strikesChanged = true;
+    });
+
+    if (transmissionsChanged) {
+      saveTransmissions(transmissions);
+    }
+
+    if (strikesChanged) {
+      setState({ strikes });
+      state = getState();
+    }
+  }
+
+  /* =========================================
+     ANSWER BOARD
+  ========================================= */
+
+  function renderAnswerBoard(currentQuestion) {
+    answerBoard.innerHTML = "";
+
+    currentQuestion.answers.forEach(
+      (answer, index) => {
+        const isRevealed =
+          Boolean(state.revealed[index]);
+
+        const card =
+          document.createElement("article");
+
+        card.className = [
+  "answer-card",
+  isRevealed ? "revealed" : "hidden-answer",
+  flashRow === index ? "flip-reveal" : ""
+]
+  .filter(Boolean)
+  .join(" ");
+card.innerHTML = `
+  <div class="answer-card-inner">
+    <div class="answer-card-face answer-card-front">
+      <div class="row-number">${index + 1}</div>
+
+      <div class="row-bar hidden-row-bar">
+        <span class="hidden-answer-mark">
+          ${index + 1}
+        </span>
+      </div>
+
+      <div class="row-points hidden-points"></div>
+    </div>
+
+    <div class="answer-card-face answer-card-back">
+      <div class="row-number">${index + 1}</div>
+
+      <div class="row-bar">
+        <span class="row-answer">
+          ${answer}
+        </span>
+      </div>
+
+      <div class="row-points">
+        ${getBoardPointValue(index)}
+      </div>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="reveal-btn"
+    data-answer-index="${index}"
+    ${isRevealed ? "disabled" : ""}
+  >
+    ${isRevealed ? "Revealed" : "Manual Reveal"}
+  </button>
+`;
+
+        card
+          .querySelector(".reveal-btn")
+          .addEventListener("click", () => {
+            manuallyRevealAnswer(index);
+          });
+
+        answerBoard.appendChild(card);
+      }
+    );
+  }
+
+  function manuallyRevealAnswer(answerIndex) {
+    state = getState();
+
+    if (state.revealed[answerIndex]) {
       return;
     }
 
     const revealed = {
       ...state.revealed,
-      [index]: true
+      [answerIndex]: true
     };
 
-    flashRow = index;
-
     setState({ revealed });
-    showRevealBanner();
+
+    flashRow = answerIndex;
+
+    showRevealBanner("ANSWER REVEALED");
 
     render();
 
     window.setTimeout(() => {
-      if (flashRow === index) {
-        flashRow = null;
-        render();
-      }
+      flashRow = null;
+      render();
     }, 1000);
   }
+
+  /* =========================================
+     ROUND NAVIGATION
+  ========================================= */
 
   function renderRoundNavigation() {
     roundNav.innerHTML = "";
 
-    missionQuestions.forEach((question, index) => {
-      const button = document.createElement("button");
+    missionQuestions.forEach(
+      (question, index) => {
+        const button =
+          document.createElement("button");
 
-      button.type = "button";
-      button.className =
-        state.questionIndex === index
-          ? "round-pill active"
-          : "round-pill";
+        button.type = "button";
 
-      button.textContent = `Round ${index + 1}`;
+        button.className =
+          state.questionIndex === index
+            ? "round-pill active"
+            : "round-pill";
 
-      button.addEventListener("click", () => {
-        setRound(index + 1);
-        render();
-      });
+        button.textContent =
+          `Round ${index + 1}`;
 
-      roundNav.appendChild(button);
-    });
+        button.addEventListener("click", () => {
+          setRound(index + 1);
+          render();
+        });
+
+        roundNav.appendChild(button);
+      }
+    );
   }
 
-  function renderAnswerBoard(currentQuestion) {
-    answerBoard.innerHTML = "";
-
-    currentQuestion.answers.forEach((answer, index) => {
-      const revealed = Boolean(state.revealed[index]);
-      const card = document.createElement("article");
-
-      card.className = [
-        "answer-card",
-        revealed ? "revealed" : "",
-        flashRow === index ? "flash" : ""
-      ]
-        .filter(Boolean)
-        .join(" ");
-
-      card.innerHTML = `
-        <div class="row-number">${index + 1}</div>
-
-        <div class="row-bar">
-          <span class="row-answer">
-            ${revealed ? answer : ""}
-          </span>
-        </div>
-
-        <div class="row-points">
-          ${revealed ? getBoardPointValue(index) : ""}
-        </div>
-
-        <button
-          type="button"
-          class="reveal-btn"
-          ${revealed ? "disabled" : ""}
-        >
-          ${revealed ? "Revealed" : "Reveal"}
-        </button>
-      `;
-
-      card
-        .querySelector(".reveal-btn")
-        .addEventListener("click", () => revealBoardAnswer(index));
-
-      answerBoard.appendChild(card);
-    });
-  }
+  /* =========================================
+     SCOREBOARD
+  ========================================= */
 
   function renderScoreboard() {
     teamScores.innerHTML = "";
@@ -204,7 +381,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const strikes = state.strikes[team] || 0;
       const locked = strikes >= 3;
 
-      const card = document.createElement("article");
+      const card =
+        document.createElement("article");
+
       card.className = locked
         ? "team-score-card team-locked"
         : "team-score-card";
@@ -212,10 +391,17 @@ document.addEventListener("DOMContentLoaded", () => {
       card.innerHTML = `
         <div class="team-topline">
           <div>
-            <div class="team-name">${team} Crew</div>
+            <div class="team-name">
+              ${team} Crew
+            </div>
+
             ${
               locked
-                ? '<div class="team-lock-label">LOCKED — 3 STRIKES</div>'
+                ? `
+                  <div class="team-lock-label">
+                    LOCKED — 3 STRIKES
+                  </div>
+                `
                 : ""
             }
           </div>
@@ -223,14 +409,19 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="score-pill">${score}</div>
         </div>
 
-        <div class="strike-row" aria-label="${strikes} strikes">
-          ${Array.from({ length: 3 }, (_, index) => {
-            return `
-              <span class="strike-slot ${index < strikes ? "active" : ""}">
+        <div class="strike-row">
+          ${Array.from(
+            { length: 3 },
+            (_, index) => `
+              <span
+                class="strike-slot ${
+                  index < strikes ? "active" : ""
+                }"
+              >
                 X
               </span>
-            `;
-          }).join("")}
+            `
+          ).join("")}
         </div>
 
         <div class="score-controls">
@@ -240,7 +431,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button
                   type="button"
                   class="score-btn"
-                  data-action="points"
                   data-points="${points}"
                 >
                   +${points}
@@ -253,8 +443,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="strike-controls">
           <button
             type="button"
-            class="strike-btn"
-            data-action="strike"
+            class="strike-btn add-strike-btn"
             ${locked ? "disabled" : ""}
           >
             Add Strike
@@ -263,101 +452,129 @@ document.addEventListener("DOMContentLoaded", () => {
           <button
             type="button"
             class="strike-btn clear"
-            data-action="clear-strikes"
           >
             Clear Strikes
           </button>
         </div>
       `;
 
-      card.querySelectorAll("button").forEach((button) => {
-        button.addEventListener("click", () => {
-          state = getState();
+      card
+        .querySelectorAll(".score-btn")
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            const points =
+              Number(button.dataset.points);
 
-          const scores = { ...state.scores };
-          const nextStrikes = { ...state.strikes };
+            const scores = {
+              ...getState().scores
+            };
 
-          if (button.dataset.action === "points") {
-            const points = Number(button.dataset.points);
-            scores[team] = (scores[team] || 0) + points;
-          }
+            scores[team] =
+              (scores[team] || 0) + points;
 
-          if (button.dataset.action === "strike") {
-            nextStrikes[team] = Math.min(
-              3,
-              (nextStrikes[team] || 0) + 1
-            );
-          }
-
-          if (button.dataset.action === "clear-strikes") {
-            nextStrikes[team] = 0;
-          }
-
-          setState({
-            scores,
-            strikes: nextStrikes
+            setState({ scores });
+            render();
           });
+        });
 
+      card
+        .querySelector(".add-strike-btn")
+        .addEventListener("click", () => {
+          const current = getState();
+          const strikes = {
+            ...current.strikes
+          };
+
+          strikes[team] = Math.min(
+            3,
+            (strikes[team] || 0) + 1
+          );
+
+          setState({ strikes });
+          showStrikeOverlay(team);
           render();
         });
-      });
+
+      card
+        .querySelector(".strike-btn.clear")
+        .addEventListener("click", () => {
+          const current = getState();
+          const strikes = {
+            ...current.strikes
+          };
+
+          strikes[team] = 0;
+
+          setState({ strikes });
+          render();
+        });
 
       teamScores.appendChild(card);
     });
   }
 
-  function approveTransmission(transmissionId, points) {
+  /* =========================================
+     APPROVE / REJECT TRANSMISSIONS
+  ========================================= */
+
+  function approveTransmission(
+    transmissionId,
+    points
+  ) {
     const transmissions = getTransmissions();
 
     const transmission = transmissions.find(
-      (item) => String(item.id) === String(transmissionId)
+      (item) =>
+        String(item.id) === String(transmissionId)
     );
 
-    if (!transmission || transmission.status !== "pending") {
+    if (
+      !transmission ||
+      transmission.status !== "pending"
+    ) {
       return;
+    }
+
+    const current = getState();
+
+    const answerIndex = findBoardAnswerIndex(
+      transmission.answer,
+      current.questionIndex
+    );
+
+    if (answerIndex === -1) {
+      const continueApproval = window.confirm(
+        `"${transmission.answer}" does not exactly match a board answer. Approve it anyway? It will not be launchable.`
+      );
+
+      if (!continueApproval) {
+        return;
+      }
     }
 
     transmission.status = "approved";
     transmission.pointsAwarded = points;
-    transmission.approvedAt = new Date().toISOString();
+    transmission.boardAnswerIndex =
+      answerIndex === -1 ? null : answerIndex;
+
+    transmission.approvedAt =
+      new Date().toISOString();
 
     saveTransmissions(transmissions);
 
-    state = getState();
+    const scores = {
+      ...current.scores
+    };
 
-    const scores = { ...state.scores };
     scores[transmission.teamName] =
-      (scores[transmission.teamName] || 0) + points;
+      (scores[transmission.teamName] || 0) +
+      points;
 
-    const currentQuestion =
-      missionQuestions[state.questionIndex] || missionQuestions[0];
+    setState({ scores });
 
-    const revealed = { ...state.revealed };
-
-    const matchIndex = findMatchingAnswerIndex(
-      transmission.answer,
-      currentQuestion.answers
+    showRevealBanner(
+      `${transmission.teamName.toUpperCase()} APPROVED +${points}`
     );
-
-    if (matchIndex !== -1) {
-      revealed[matchIndex] = true;
-      flashRow = matchIndex;
-      showRevealBanner(`${transmission.teamName} CREW — +${points}`);
-
-      window.setTimeout(() => {
-        if (flashRow === matchIndex) {
-          flashRow = null;
-          render();
-        }
-      }, 1000);
-    } else {
-      showRevealBanner(`${transmission.teamName} CREW — +${points}`);
-    }
-
-    setState({
-      scores,
-      revealed
-    });
 
     render();
   }
@@ -366,22 +583,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const transmissions = getTransmissions();
 
     const transmission = transmissions.find(
-      (item) => String(item.id) === String(transmissionId)
+      (item) =>
+        String(item.id) === String(transmissionId)
     );
 
-    if (!transmission || transmission.status !== "pending") {
+    if (
+      !transmission ||
+      transmission.status !== "pending"
+    ) {
       return;
     }
 
     transmission.status = "rejected";
     transmission.pointsAwarded = 0;
-    transmission.approvedAt = new Date().toISOString();
+    transmission.rejectionReason = "incorrect";
+    transmission.approvedAt =
+      new Date().toISOString();
 
     saveTransmissions(transmissions);
 
-    state = getState();
+    const current = getState();
 
-    const strikes = { ...state.strikes };
+    const strikes = {
+      ...current.strikes
+    };
 
     strikes[transmission.teamName] = Math.min(
       3,
@@ -390,13 +615,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setState({ strikes });
 
-    showRevealBanner(`${transmission.teamName} CREW — X`);
-
+    showStrikeOverlay(transmission.teamName);
     render();
   }
 
+  /* =========================================
+     PENDING TRANSMISSIONS
+  ========================================= */
+
   function renderPendingTransmissions() {
-    const pending = getPendingTransmissions();
+    const pending = getPendingTransmissions()
+      .filter(
+        (item) =>
+          Number(item.round) === Number(state.round)
+      )
+      .sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() -
+          new Date(b.timestamp).getTime()
+      );
+
+    pendingCount.textContent =
+      `${pending.length} Pending`;
 
     transmissionsList.innerHTML = "";
 
@@ -406,17 +646,25 @@ document.addEventListener("DOMContentLoaded", () => {
           No pending crew transmissions.
         </p>
       `;
+
       return;
     }
 
     pending.forEach((transmission) => {
-      const card = document.createElement("article");
+      const card =
+        document.createElement("article");
+
       card.className = "transmission-card";
 
       card.innerHTML = `
         <div class="transmission-topline">
-          <strong>${transmission.teamName} Crew</strong>
-          <span>Round ${transmission.round}</span>
+          <strong>
+            ${transmission.teamName} Crew
+          </strong>
+
+          <span>
+            Round ${transmission.round}
+          </span>
         </div>
 
         <p class="student-answer-text">
@@ -430,7 +678,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button
                   type="button"
                   class="award-btn"
-                  data-id="${transmission.id}"
                   data-points="${points}"
                 >
                   +${points}
@@ -442,21 +689,22 @@ document.addEventListener("DOMContentLoaded", () => {
           <button
             type="button"
             class="reject-btn"
-            data-id="${transmission.id}"
           >
             X
           </button>
         </div>
       `;
 
-      card.querySelectorAll(".award-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          approveTransmission(
-            button.dataset.id,
-            Number(button.dataset.points)
-          );
+      card
+        .querySelectorAll(".award-btn")
+        .forEach((button) => {
+          button.addEventListener("click", () => {
+            approveTransmission(
+              transmission.id,
+              Number(button.dataset.points)
+            );
+          });
         });
-      });
 
       card
         .querySelector(".reject-btn")
@@ -468,35 +716,321 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function renderApprovedResponses() {
-    const approved = getApprovedTransmissions()
-      .slice()
-      .reverse()
-      .slice(0, 12);
+  /* =========================================
+     APPROVED — WAITING TO REVEAL
+  ========================================= */
 
-    approvedList.innerHTML = "";
+  function getLaunchableGroups() {
+    const approved =
+      getApprovedWaitingTransmissions()
+        .filter(
+          (item) =>
+            Number(item.round) ===
+              Number(state.round) &&
+            Number.isInteger(item.boardAnswerIndex) &&
+            !state.revealed[item.boardAnswerIndex]
+        )
+        .sort(
+          (a, b) =>
+            new Date(a.approvedAt).getTime() -
+            new Date(b.approvedAt).getTime()
+        );
 
-    if (approved.length === 0) {
-      approvedList.innerHTML = `
-        <p class="empty-note">
-          No approved responses yet.
-        </p>
-      `;
+    const groups = new Map();
+
+    approved.forEach((item) => {
+      const key = String(item.boardAnswerIndex);
+
+      if (!groups.has(key)) {
+        groups.set(key, []);
+      }
+
+      groups.get(key).push(item);
+    });
+
+    return [...groups.values()];
+  }
+
+ function renderApprovedWaiting() {
+  const groups = getLaunchableGroups();
+
+  const approvedCount = groups.reduce(
+    (total, group) => total + group.length,
+    0
+  );
+
+  approvedWaitingCount.textContent =
+    `${approvedCount} Waiting`;
+
+  approvedWaitingList.innerHTML = "";
+
+  if (groups.length === 0) {
+    approvedWaitingList.innerHTML = `
+      <p class="empty-note">
+        No approved answers waiting.
+      </p>
+    `;
+
+    launchAnswerBtn.disabled = true;
+    return;
+  }
+
+  groups.forEach((group, groupIndex) => {
+    const firstTransmission = group[0];
+    const answerIndex = firstTransmission.boardAnswerIndex;
+
+    const boardAnswer =
+      missionQuestions[state.questionIndex]
+        .answers[answerIndex];
+
+    const card = document.createElement("article");
+
+    card.className =
+      groupIndex === 0
+        ? "reveal-group-card next-to-launch"
+        : "reveal-group-card";
+
+    card.innerHTML = `
+      <div class="reveal-group-header">
+        <div>
+          <span class="reveal-group-label">
+            ${groupIndex === 0 ? "NEXT TO LAUNCH" : "WAITING"}
+          </span>
+
+          <h3>${boardAnswer}</h3>
+        </div>
+
+        <span class="team-count-badge">
+          ${group.length}
+          ${group.length === 1 ? "Crew" : "Crews"}
+        </span>
+      </div>
+
+      <div class="reveal-group-teams">
+        ${group
+          .map(
+            (transmission) => `
+              <div class="reveal-team-row">
+                <span>${transmission.teamName} Crew</span>
+                <strong>+${transmission.pointsAwarded}</strong>
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+    `;
+
+    approvedWaitingList.appendChild(card);
+  });
+
+  launchAnswerBtn.disabled = launchInProgress;
+}
+
+  /* =========================================
+     LAUNCH NEXT ANSWER
+  ========================================= */
+
+  async function launchNextAnswer() {
+    if (launchInProgress) {
       return;
     }
 
-    approved.forEach((transmission) => {
-      const card = document.createElement("article");
+    state = getState();
+
+    const groups = getLaunchableGroups();
+
+    if (groups.length === 0) {
+      window.alert(
+        "There are no launchable approved answers."
+      );
+
+      return;
+    }
+
+    const group = groups[0];
+    const answerIndex =
+      group[0].boardAnswerIndex;
+
+    const boardAnswer =
+      missionQuestions[state.questionIndex]
+        .answers[answerIndex];
+        const matchingPending = getPendingTransmissions().filter(
+  (item) =>
+    Number(item.round) === Number(state.round) &&
+    findBoardAnswerIndex(
+      item.answer,
+      state.questionIndex
+    ) === answerIndex
+);
+
+if (matchingPending.length > 0) {
+  window.alert(
+    `There ${
+      matchingPending.length === 1 ? "is" : "are"
+    } still ${matchingPending.length} pending response${
+      matchingPending.length === 1 ? "" : "s"
+    } matching "${boardAnswer}". Approve or reject every matching response before launching this answer.`
+  );
+
+  return;
+}
+
+    launchInProgress = true;
+    launchAnswerBtn.disabled = true;
+
+    answerLaunchOverlay.classList.remove(
+      "hidden",
+      "show"
+    );
+
+    answerLaunchOverlay.style.display = "grid";
+    answerLaunchOverlay.style.visibility =
+      "visible";
+
+    answerLaunchOverlay.classList.add("show");
+
+    answerLaunchTitle.textContent =
+      "Launching Answer";
+
+    answerLaunchFinal.classList.remove("show");
+    answerLaunchCountdown.textContent = "";
+
+    for (let count = 3; count >= 1; count -= 1) {
+      answerLaunchCountdown.textContent =
+        String(count);
+
+      answerLaunchCountdown.classList.remove(
+        "show"
+      );
+
+      void answerLaunchCountdown.offsetWidth;
+
+      answerLaunchCountdown.classList.add("show");
+
+      await wait(600);
+    }
+
+    answerLaunchCountdown.textContent = "";
+    answerLaunchFinal.textContent =
+      "Transmission Confirmed";
+
+    answerLaunchFinal.classList.add("show");
+
+    await wait(550);
+
+    const revealed = {
+      ...state.revealed,
+      [answerIndex]: true
+    };
+
+    setState({ revealed });
+
+    const transmissions = getTransmissions();
+    const groupIds = new Set(
+      group.map((item) => String(item.id))
+    );
+
+    transmissions.forEach((item) => {
+      if (groupIds.has(String(item.id))) {
+        item.status = "revealed";
+        item.revealedAt =
+          new Date().toISOString();
+      }
+    });
+
+    saveTransmissions(transmissions);
+
+    flashRow = answerIndex;
+
+    showRevealBanner(
+      `${boardAnswer.toUpperCase()} — ${getBoardPointValue(answerIndex)}`
+    );
+
+    render();
+
+    await wait(650);
+
+    answerLaunchOverlay.classList.remove("show");
+    answerLaunchOverlay.classList.add("hidden");
+    answerLaunchOverlay.style.display = "none";
+
+    launchInProgress = false;
+
+    window.setTimeout(() => {
+      flashRow = null;
+      render();
+    }, 500);
+  }
+
+  /* =========================================
+     REVEALED HISTORY
+  ========================================= */
+
+  function renderRevealedHistory() {
+    const history = getApprovedTransmissions()
+      .filter(
+        (item) =>
+          Number(item.round) === Number(state.round) &&
+          (
+            item.status === "revealed" ||
+            item.status === "rejected"
+          )
+      )
+      .sort((a, b) => {
+        const aTime =
+          a.revealedAt ||
+          a.approvedAt ||
+          a.timestamp;
+
+        const bTime =
+          b.revealedAt ||
+          b.approvedAt ||
+          b.timestamp;
+
+        return (
+          new Date(bTime).getTime() -
+          new Date(aTime).getTime()
+        );
+      });
+
+    revealedList.innerHTML = "";
+
+    if (history.length === 0) {
+      revealedList.innerHTML = `
+        <p class="empty-note">
+          No answers revealed yet.
+        </p>
+      `;
+
+      return;
+    }
+
+    history.forEach((transmission) => {
+      const card =
+        document.createElement("article");
 
       card.className =
         transmission.status === "rejected"
           ? "approved-card rejected"
           : "approved-card";
 
-      card.innerHTML = `
-        <strong>${transmission.teamName} Crew</strong>
+      const isLateDuplicate =
+        transmission.rejectionReason ===
+        "already-revealed";
 
-        <span>${transmission.answer}</span>
+      card.innerHTML = `
+        <strong>
+          ${transmission.teamName} Crew
+        </strong>
+
+        <span>
+          ${transmission.answer}
+          ${
+            isLateDuplicate
+              ? "<small>Already revealed</small>"
+              : ""
+          }
+        </span>
 
         <b>
           ${
@@ -507,50 +1041,78 @@ document.addEventListener("DOMContentLoaded", () => {
         </b>
       `;
 
-      approvedList.appendChild(card);
+      revealedList.appendChild(card);
     });
   }
+
+  /* =========================================
+     MAIN RENDER
+  ========================================= */
 
   function render() {
     state = getState();
 
+    processLateDuplicateAnswers();
+
+    state = getState();
+
     const currentQuestion =
-      missionQuestions[state.questionIndex] || missionQuestions[0];
+      missionQuestions[state.questionIndex] ||
+      missionQuestions[0];
 
-    roundLabel.textContent = `Round ${state.round}`;
-    questionBox.textContent = currentQuestion.prompt;
-    timerDisplay.textContent = formatTime(state.timer);
+    roundLabel.textContent =
+      `Round ${state.round}`;
 
-    totalPointsDisplay.textContent = calculateBoardPoints(
-      currentQuestion,
-      state.revealed || {}
-    );
+    questionBox.textContent =
+      currentQuestion.prompt;
 
-    winnerBox.textContent = state.winner
-      ? `Winner: ${state.winner} Crew`
-      : "Mission in progress";
+    timerDisplay.textContent =
+      formatTime(state.timer);
+
+    totalPointsDisplay.textContent =
+      calculateBoardPoints(
+        currentQuestion,
+        state.revealed || {}
+      );
+
+    winnerBox.textContent =
+      state.winner
+        ? `Winner: ${state.winner} Crew`
+        : "Mission in progress";
 
     renderRoundNavigation();
     renderAnswerBoard(currentQuestion);
     renderPendingTransmissions();
-    renderApprovedResponses();
+    renderApprovedWaiting();
+    renderRevealedHistory();
     renderScoreboard();
   }
+
+  /* =========================================
+     MISSION START SEQUENCE
+  ========================================= */
 
   async function runLaunchSequence() {
     if (launchOverlay.classList.contains("active")) {
       return;
     }
 
-    launchOverlay.classList.remove("hidden", "closing");
+    launchOverlay.classList.remove(
+      "hidden",
+      "closing"
+    );
+
     launchOverlay.classList.add("active");
 
     launchChecklist.innerHTML = "";
     launchCountdown.textContent = "";
     launchFinal.classList.remove("show");
 
-    launchTitle.textContent = "STARBASE MISSION CONTROL";
-    launchSubtitle.textContent = "Initializing Flight Feud";
+    launchTitle.textContent =
+      "STARBASE MISSION CONTROL";
+
+    launchSubtitle.textContent =
+      "Initializing Flight Feud";
 
     startMissionBtn.disabled = true;
 
@@ -563,9 +1125,12 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     for (const item of checklistItems) {
-      const row = document.createElement("div");
+      const row =
+        document.createElement("div");
 
-      row.className = "launch-check-item";
+      row.className =
+        "launch-check-item";
+
       row.textContent = `✓ ${item}`;
 
       launchChecklist.appendChild(row);
@@ -576,7 +1141,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     for (let count = 5; count >= 1; count -= 1) {
-      launchCountdown.textContent = count;
+      launchCountdown.textContent =
+        String(count);
+
       launchCountdown.classList.add("show");
 
       await wait(650);
@@ -593,7 +1160,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     await wait(650);
 
-    launchOverlay.classList.remove("active", "closing");
+    launchOverlay.classList.remove(
+      "active",
+      "closing"
+    );
+
     launchOverlay.classList.add("hidden");
 
     startMissionBtn.disabled = false;
@@ -606,6 +1177,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     render();
   }
+
+  /* =========================================
+     CONTROL EVENTS
+  ========================================= */
+
+  launchAnswerBtn.addEventListener(
+    "click",
+    launchNextAnswer
+  );
 
   nextRoundBtn.addEventListener("click", () => {
     state = getState();
@@ -637,17 +1217,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const winner = [...teams].sort(
       (a, b) =>
-        (state.scores[b] || 0) - (state.scores[a] || 0)
+        (state.scores[b] || 0) -
+        (state.scores[a] || 0)
     )[0];
 
     setState({ winner });
 
-    showRevealBanner(`${winner} CREW WINS!`);
+    showRevealBanner(
+      `${winner.toUpperCase()} CREW WINS!`
+    );
 
     render();
   });
 
-  startMissionBtn.addEventListener("click", runLaunchSequence);
+  startMissionBtn.addEventListener(
+    "click",
+    runLaunchSequence
+  );
 
   timerStartBtn.addEventListener("click", () => {
     setState({ timerRunning: true });
@@ -673,13 +1259,19 @@ document.addEventListener("DOMContentLoaded", () => {
   window.setInterval(() => {
     const current = getState();
 
-    if (current.timerRunning && current.timer > 0) {
+    if (
+      current.timerRunning &&
+      current.timer > 0
+    ) {
       setState({
         timer: current.timer - 1
       });
     }
 
-    if (current.timerRunning && current.timer <= 1) {
+    if (
+      current.timerRunning &&
+      current.timer <= 1
+    ) {
       setState({
         timer: 0,
         timerRunning: false
