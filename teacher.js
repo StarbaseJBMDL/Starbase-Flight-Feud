@@ -82,6 +82,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const launchFinal =
     document.getElementById("launchFinal");
+     /* =========================================
+     GAME AUDIO
+  ========================================= */
+
+  const dingSound =
+    document.getElementById("dingSound");
+
+  const strikeSound =
+    document.getElementById("strikeSound");
+
+  const countdownSound =
+    document.getElementById("countdownSound");
+
+  const applauseSound =
+    document.getElementById("applauseSound");
+
+  const winnerSound =
+    document.getElementById("winnerSound"); 
 
   const awardValues = [5, 12, 18, 22, 28];
   const boardPointValues = [28, 22, 18, 12, 8, 5];
@@ -94,7 +112,23 @@ document.addEventListener("DOMContentLoaded", () => {
   /* =========================================
      GENERAL HELPERS
   ========================================= */
+  function playSound(sound, volume = 1) {
+    if (!sound) {
+      return;
+    }
 
+    sound.pause();
+    sound.currentTime = 0;
+    sound.volume = volume;
+
+    const playPromise = sound.play();
+
+    if (playPromise) {
+      playPromise.catch((error) => {
+        console.warn("Sound could not play:", error);
+      });
+    }
+  }
   function wait(milliseconds) {
     return new Promise((resolve) => {
       window.setTimeout(resolve, milliseconds);
@@ -148,6 +182,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showStrikeOverlay(teamName) {
+     playSound(strikeSound, 0.9);
+
     if (!strikeOverlay) {
       return;
     }
@@ -896,6 +932,12 @@ if (matchingPending.length > 0) {
     answerLaunchCountdown.textContent = "";
 
     for (let count = 3; count >= 1; count -= 1) {
+      const countdownBeep = new Audio("sounds/countdown.mp3");
+countdownBeep.volume = 0.75;
+countdownBeep.play().catch((error) => {
+  console.warn("Countdown sound could not play:", error);
+});
+
       answerLaunchCountdown.textContent =
         String(count);
 
@@ -907,7 +949,7 @@ if (matchingPending.length > 0) {
 
       answerLaunchCountdown.classList.add("show");
 
-      await wait(600);
+      await wait(1000);
     }
 
     answerLaunchCountdown.textContent = "";
@@ -925,7 +967,13 @@ if (matchingPending.length > 0) {
 
     setState({ revealed });
 
-    const transmissions = getTransmissions();
+playSound(dingSound, 0.9);
+
+window.setTimeout(() => {
+  playSound(applauseSound, 0.55);
+}, 900);
+
+const transmissions = getTransmissions();
     const groupIds = new Set(
       group.map((item) => String(item.id))
     );
@@ -1222,6 +1270,7 @@ if (matchingPending.length > 0) {
     )[0];
 
     setState({ winner });
+    playSound(winnerSound, 0.8);
 
     showRevealBanner(
       `${winner.toUpperCase()} CREW WINS!`
