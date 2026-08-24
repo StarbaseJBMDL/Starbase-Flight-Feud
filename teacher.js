@@ -12,6 +12,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const totalPointsDisplay = document.getElementById("totalPointsDisplay");
   const revealBanner = document.getElementById("revealBanner");
   const winnerBox = document.getElementById("winnerBox");
+  const winnerOverlay =
+  document.getElementById("winnerOverlay");
+
+const winnerCrewName =
+  document.getElementById("winnerCrewName");
+
+const winnerFinalScore =
+  document.getElementById("winnerFinalScore");
+
+const closeWinnerBtn =
+  document.getElementById("closeWinnerBtn");
 
   const pendingCount = document.getElementById("pendingCount");
   const approvedWaitingCount =
@@ -1327,24 +1338,54 @@ const transmissions = getTransmissions();
     render();
   });
 
-  winnerBtn.addEventListener("click", () => {
-    state = getState();
+ winnerBtn.addEventListener("click", () => {
+  state = getState();
 
-    const winner = [...teams].sort(
-      (a, b) =>
-        (state.scores[b] || 0) -
-        (state.scores[a] || 0)
-    )[0];
+  const winner = [...teams].sort(
+    (a, b) =>
+      (state.scores[b] || 0) -
+      (state.scores[a] || 0)
+  )[0];
 
-    setState({ winner });
-    playSound(winnerSound, 0.8);
+  const winnerScore =
+    state.scores[winner] || 0;
 
-    showRevealBanner(
-      `${winner.toUpperCase()} CREW WINS!`
-    );
+  setState({ winner });
 
-    render();
-  });
+  playSound(winnerSound, 0.8);
+
+  winnerCrewName.textContent =
+    `${winner.toUpperCase()} CREW`;
+
+  winnerFinalScore.textContent =
+    winnerScore;
+
+  winnerOverlay.classList.remove(
+    "hidden",
+    "show"
+  );
+
+  winnerOverlay.style.display = "grid";
+  winnerOverlay.style.visibility = "visible";
+
+  void winnerOverlay.offsetWidth;
+
+  winnerOverlay.classList.add("show");
+
+  launchConfetti();
+
+  showRevealBanner(
+    `${winner.toUpperCase()} CREW WINS!`
+  );
+
+  render();
+});
+
+closeWinnerBtn.addEventListener("click", () => {
+  winnerOverlay.classList.remove("show");
+  winnerOverlay.classList.add("hidden");
+  winnerOverlay.style.display = "none";
+});
 
   startMissionBtn.addEventListener(
     "click",

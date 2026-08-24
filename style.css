@@ -1845,3 +1845,134 @@ body.strike-shake .strike-overlay p {
     opacity: 0;
   }
 }
+/* =========================================
+   WINNER CEREMONY
+========================================= */
+
+.winner-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300000;
+  display: none;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 213, 79, 0.18),
+      transparent 42%
+    ),
+    rgba(1, 5, 16, 0.97);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.winner-overlay.show {
+  display: grid !important;
+  opacity: 1;
+  visibility: visible;
+  animation: winnerOverlayFade 0.45s ease;
+}
+
+.winner-overlay.hidden {
+  display: none;
+}
+
+.winner-ceremony {
+  width: min(760px, 100%);
+  padding: 42px 34px;
+  border: 2px solid var(--gold);
+  border-radius: 26px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(5, 24, 58, 0.98),
+      rgba(1, 8, 22, 0.98)
+    );
+  box-shadow:
+    0 0 55px rgba(255, 213, 79, 0.34),
+    inset 0 0 30px rgba(77, 195, 255, 0.08);
+  text-align: center;
+  animation: winnerCeremonyPop 0.7s ease;
+}
+
+.winner-ceremony h2 {
+  margin: 8px 0 12px;
+  color: var(--gold);
+  font-size: clamp(2.1rem, 6vw, 5rem);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.winner-trophy {
+  margin: 8px 0 10px;
+  font-size: clamp(5rem, 12vw, 9rem);
+  filter: drop-shadow(0 0 24px rgba(255, 213, 79, 0.45));
+}
+
+.winner-crew-name {
+  color: var(--white);
+  font-size: clamp(2.2rem, 7vw, 5.6rem);
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-shadow:
+    0 0 20px rgba(77, 195, 255, 0.45),
+    0 0 45px rgba(77, 195, 255, 0.2);
+}
+
+.winner-subtitle {
+  margin: 10px 0 24px;
+  color: var(--blue);
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.winner-score-label {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.winner-final-score {
+  margin: 6px 0 24px;
+  color: var(--gold);
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 0 28px rgba(255, 213, 79, 0.45);
+}
+
+.winner-close-btn {
+  width: min(360px, 100%);
+}
+
+@keyframes winnerOverlayFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes winnerCeremonyPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  65% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
