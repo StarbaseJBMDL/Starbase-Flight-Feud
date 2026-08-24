@@ -128,7 +128,61 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("Sound could not play:", error);
       });
     }
+    }
+
+    function launchConfetti() {
+  const colors = [
+    "#ffd54f",
+    "#4dc3ff",
+    "#7cff8a",
+    "#ff4d5a",
+    "#ffffff"
+  ];
+
+  for (let i = 0; i < 90; i += 1) {
+    const piece = document.createElement("div");
+
+    piece.className = "confetti-piece";
+    piece.style.left = `${Math.random() * 100}vw`;
+    piece.style.background =
+      colors[Math.floor(Math.random() * colors.length)];
+
+    piece.style.animationDuration =
+      `${2.2 + Math.random() * 2.2}s`;
+
+    piece.style.animationDelay =
+      `${Math.random() * 0.5}s`;
+
+    document.body.appendChild(piece);
+
+    window.setTimeout(() => {
+      piece.remove();
+    }, 5000);
   }
+}
+
+window.launchConfetti = launchConfetti;
+
+function checkRoundComplete(revealedState) {
+  const currentState = getState();
+
+  const question =
+    missionQuestions[currentState.questionIndex] ||
+    missionQuestions[0];
+
+  const allAnswersRevealed =
+    question.answers.every((_, index) =>
+      Boolean(revealedState[index])
+    );
+
+  if (allAnswersRevealed) {
+    window.setTimeout(() => {
+      launchConfetti();
+      showRevealBanner("ROUND COMPLETE!");
+    }, 1800);
+  }
+}
+
   function wait(milliseconds) {
     return new Promise((resolve) => {
       window.setTimeout(resolve, milliseconds);
@@ -183,6 +237,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showStrikeOverlay(teamName) {
      playSound(strikeSound, 0.9);
+
+     document.body.classList.remove("strike-shake");
+void document.body.offsetWidth;
+document.body.classList.add("strike-shake");
+
+window.setTimeout(() => {
+  document.body.classList.remove("strike-shake");
+}, 500);
+
 
     if (!strikeOverlay) {
       return;
@@ -361,7 +424,9 @@ card.innerHTML = `
 
     setState({ revealed });
 
-    flashRow = answerIndex;
+checkRoundComplete(revealed);
+
+flashRow = answerIndex;
 
     showRevealBanner("ANSWER REVEALED");
 
@@ -925,8 +990,8 @@ if (matchingPending.length > 0) {
 
     answerLaunchOverlay.classList.add("show");
 
-    answerLaunchTitle.textContent =
-      "Launching Answer";
+   answerLaunchTitle.textContent =
+  "Verifying Transmission";
 
     answerLaunchFinal.classList.remove("show");
     answerLaunchCountdown.textContent = "";
@@ -954,7 +1019,7 @@ countdownBeep.play().catch((error) => {
 
     answerLaunchCountdown.textContent = "";
     answerLaunchFinal.textContent =
-      "Transmission Confirmed";
+  "Answer Confirmed";
 
     answerLaunchFinal.classList.add("show");
 
@@ -965,7 +1030,9 @@ countdownBeep.play().catch((error) => {
       [answerIndex]: true
     };
 
-    setState({ revealed });
+   setState({ revealed });
+
+checkRoundComplete(revealed);
 
 playSound(dingSound, 0.9);
 
