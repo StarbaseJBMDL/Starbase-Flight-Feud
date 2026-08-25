@@ -36,50 +36,58 @@
       </header>
 
       <main class="projector-layout">
-        <section class="panel projector-question-panel">
-          <p class="eyebrow">Mission Brief</p>
 
-          <h2 id="projectorQuestion">
-            Loading mission question...
-          </h2>
-        </section>
+  <!-- CREW SCOREBOARD -->
+  <section class="panel projector-scoreboard-panel">
+    <div class="panel-header">
+      <div>
+        <p class="eyebrow">Mission Scoreboard</p>
+        <h2>Crew Scores</h2>
+      </div>
+    </div>
 
-        <section class="panel projector-board-panel">
-          <div class="panel-header">
-            <div>
-              <p class="eyebrow">Live Response Board</p>
-              <h2>Survey Answers</h2>
-            </div>
+    <div
+      id="projectorScores"
+      class="projector-scores"
+    ></div>
+  </section>
 
-            <div
-              id="projectorRevealBanner"
-              class="reveal-banner"
-              aria-live="polite"
-            >
-              Answer Revealed
-            </div>
-          </div>
 
-          <div
-            id="projectorAnswerBoard"
-            class="answer-board"
-          ></div>
-        </section>
+  <!-- MISSION QUESTION -->
+  <section class="panel projector-question-panel">
+    <p class="eyebrow">Mission Brief</p>
 
-        <section class="panel projector-scoreboard-panel">
-          <div class="panel-header">
-            <div>
-              <p class="eyebrow">Mission Scoreboard</p>
-              <h2>Crew Scores</h2>
-            </div>
-          </div>
+    <h2 id="projectorQuestion">
+      Loading mission question...
+    </h2>
+  </section>
 
-          <div
-            id="projectorScores"
-            class="projector-scores"
-          ></div>
-        </section>
-      </main>
+
+  <!-- SURVEY ANSWERS -->
+  <section class="panel projector-board-panel">
+    <div class="panel-header">
+      <div>
+        <p class="eyebrow">Live Response Board</p>
+        <h2>Survey Answers</h2>
+      </div>
+
+      <div
+        id="projectorRevealBanner"
+        class="reveal-banner"
+        aria-live="polite"
+      >
+        Answer Revealed
+      </div>
+    </div>
+
+    <div
+      id="projectorAnswerBoard"
+      class="answer-board"
+    ></div>
+  </section>
+
+</main>
+
     </div>
 
     <!-- STRIKE EFFECT -->
