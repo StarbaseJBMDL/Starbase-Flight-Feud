@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Flight Feud | Projector Board</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="app-shell projector-shell">
+      <header class="projector-topbar">
+        <div>
+          <p class="eyebrow">STARBASE Mission Control</p>
+          <h1>Flight Feud</h1>
+        </div>
+
+        <div class="projector-hud">
+          <div class="projector-hud-item">
+            <span>Round</span>
+            <strong id="projectorRound">1</strong>
+          </div>
+
+          <div class="projector-hud-item">
+            <span>Mission Clock</span>
+            <strong id="projectorTimer">01:00</strong>
+          </div>
+
+          <div class="projector-hud-item">
+            <span>Board Points</span>
+            <strong id="projectorBoardPoints">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="projector-layout">
+        <section class="panel projector-question-panel">
+          <p class="eyebrow">Mission Brief</p>
+
+          <h2 id="projectorQuestion">
+            Loading mission question...
+          </h2>
+        </section>
+
+        <section class="panel projector-board-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Live Response Board</p>
+              <h2>Survey Answers</h2>
+            </div>
+
+            <div
+              id="projectorRevealBanner"
+              class="reveal-banner"
+              aria-live="polite"
+            >
+              Answer Revealed
+            </div>
+          </div>
+
+          <div
+            id="projectorAnswerBoard"
+            class="answer-board"
+          ></div>
+        </section>
+
+        <section class="panel projector-scoreboard-panel">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Mission Scoreboard</p>
+              <h2>Crew Scores</h2>
+            </div>
+          </div>
+
+          <div
+            id="projectorScores"
+            class="projector-scores"
+          ></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- STRIKE EFFECT -->
+    <div
+      id="projectorStrikeOverlay"
+      class="strike-overlay hidden"
+      aria-hidden="true"
+    >
+      <div class="strike-overlay-x">X</div>
+      <p>Incorrect Transmission</p>
+    </div>
+
+    <!-- WINNER CEREMONY -->
+    <div
+      id="projectorWinnerOverlay"
+      class="winner-overlay hidden"
+      aria-hidden="true"
+    >
+      <div class="winner-ceremony">
+        <p class="eyebrow">STARBASE Mission Control</p>
+
+        <h2>MISSION COMPLETE</h2>
+
+        <div class="winner-trophy">🏆</div>
+
+        <div
+          id="projectorWinnerCrewName"
+          class="winner-crew-name"
+        >
+          ALPHA CREW
+        </div>
+
+        <p class="winner-subtitle">
+          FLIGHT FEUD CHAMPIONS
+        </p>
+
+        <div class="winner-score-label">
+          FINAL SCORE
+        </div>
+
+        <div
+          id="projectorWinnerFinalScore"
+          class="winner-final-score"
+        >
+          0
+        </div>
+      </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="shared.js"></script>
+    <script src="projector.js"></script>
+  </body>
+</html>
