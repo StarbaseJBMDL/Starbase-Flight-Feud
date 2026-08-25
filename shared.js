@@ -3,6 +3,7 @@ const TRANSMISSIONS_KEY = "flight-feud-transmissions";
 
 function createDefaultState() {
   return {
+   sessionId: `${Date.now()}-${Math.random()}`, 
     round: 1,
     questionIndex: 0,
     timer: 60,

@@ -17,82 +17,128 @@
 
         <div class="topbar-actions">
           <span class="system-pill">● Systems Online</span>
-          <a class="ghost-link" href="index.html">Mission Hub</a>
         </div>
       </header>
 
-      <main class="student-console-layout">
+      <main class="student-console-layout single-column">
         <section class="panel student-panel">
           <div class="panel-header">
             <div>
-              <p class="eyebrow">Crew transmission station</p>
-              <h2>Send Your Answer</h2>
+              <p class="eyebrow">Crew Transmission Station</p>
+              <h2>Send Your Answers</h2>
             </div>
 
-            <div id="studentStatus" class="status-tag">CREW READY</div>
+            <div id="studentStatus" class="status-tag">
+              SELECT CREW
+            </div>
           </div>
 
-          <div class="student-form-grid">
-            <div class="form-group">
-              <label class="field-label" for="teamSelect">Select Crew</label>
-              <select id="teamSelect" class="input-field"></select>
+          <!-- =========================================
+               CREW SELECTION
+          ========================================== -->
+          <section id="crewSelectPanel" class="crew-select-panel">
+            <p class="field-label">Select Your Crew</p>
+
+            <p class="crew-select-note">
+              Choose carefully. Your crew will be locked for this game.
+            </p>
+
+            <div id="crewChoiceGrid" class="crew-choice-grid"></div>
+          </section>
+
+          <!-- =========================================
+               LOCKED CREW DISPLAY
+          ========================================== -->
+          <section
+            id="lockedCrewPanel"
+            class="locked-crew-panel hidden"
+          >
+            <div>
+              <p class="field-label">Current Crew</p>
+              <h3 id="lockedCrewName">ALPHA CREW</h3>
             </div>
 
+            <div class="crew-lock-badge">
+              🔒 CREW LOCKED
+            </div>
+          </section>
+
+          <!-- =========================================
+               QUESTION
+          ========================================== -->
+          <div class="student-form-grid">
             <div class="form-group">
               <label class="field-label" for="currentQuestion">
                 Current Mission Question
               </label>
 
-              <div id="currentQuestion" class="question-box compact"></div>
+              <div
+                id="currentQuestion"
+                class="question-box compact"
+              ></div>
             </div>
 
+            <!-- =========================================
+                 MULTIPLE ANSWERS
+            ========================================== -->
             <div class="form-group">
-              <label class="field-label" for="answerInput">
-                Crew Answer
-              </label>
+              <div class="answer-entry-header">
+                <div>
+                  <p class="field-label">Crew Answers</p>
 
-              <textarea
-                id="answerInput"
-                class="input-field answer-input"
-                rows="5"
-                placeholder="Type your crew's answer here"
-              ></textarea>
+                <p
+  id="answerLimitNote"
+  class="answer-limit-note"
+>
+  Enter your crew's answers.
+</p>
+                </div>
+
+                <div
+                  id="answerLimitDisplay"
+                  class="answer-limit-badge"
+                >
+                  0 of 0 submitted
+                </div>
+              </div>
+
+              <div
+                id="answerInputs"
+                class="answer-input-list"
+              ></div>
             </div>
 
-            <button id="submitAnswerBtn" class="gold-btn full">
-              Submit Answer
+            <button
+              id="submitAnswerBtn"
+              class="gold-btn full"
+              type="button"
+            >
+              Transmit Answers
             </button>
 
-            <div id="transmissionMessage" class="success-box" aria-live="polite">
-              Transmission sent to Mission Control. Awaiting approval.
+            <div
+              id="transmissionMessage"
+              class="success-box"
+              aria-live="polite"
+            >
+              Transmission sent to Mission Control.
             </div>
           </div>
         </section>
-
-        <aside class="panel student-info-panel">
-          <p class="eyebrow">Mission Instructions</p>
-          <h2>How to Play</h2>
-
-          <ol class="mission-instructions">
-            <li>Select your crew.</li>
-            <li>Read the current mission question.</li>
-            <li>Type one answer.</li>
-            <li>Submit your transmission.</li>
-            <li>Wait for Mission Control approval.</li>
-          </ol>
-
-          <div class="student-status-card">
-            <span>Transmission Status</span>
-            <strong>Ready</strong>
-          </div>
-        </aside>
       </main>
     </div>
 
-    <div id="strikeOverlay" class="strike-overlay hidden" aria-hidden="true">
-  <div class="strike-overlay-x">X</div>
-  <p>Incorrect Answer</p>
-</div>
+    <!-- =========================================
+         STRIKE OVERLAY
+    ========================================== -->
+    <div
+      id="strikeOverlay"
+      class="strike-overlay hidden"
+      aria-hidden="true"
+    >
+      <div class="strike-overlay-x">X</div>
+      <p>Incorrect Answer</p>
+    </div>
 
     <script src="questions.js"></script>
     <script src="shared.js"></script>
