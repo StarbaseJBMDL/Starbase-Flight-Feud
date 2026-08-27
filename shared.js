@@ -1,6 +1,25 @@
 const STORAGE_KEY = "flight-feud-state";
 const TRANSMISSIONS_KEY = "flight-feud-transmissions";
 
+function syncGameStateToFirebase(state) {
+  if (
+    !window.flightFeudFirebase ||
+    !window.flightFeudFirebase.database
+  ) {
+    return;
+  }
+
+  window.flightFeudFirebase.database
+    .ref("game/state")
+    .set(state)
+    .catch((error) => {
+      console.error(
+        "Unable to sync game state to Firebase:",
+        error
+      );
+    });
+}
+
 function createDefaultState() {
   return {
    sessionId: `${Date.now()}-${Math.random()}`, 
@@ -34,6 +53,8 @@ function saveState(state) {
     STORAGE_KEY,
     JSON.stringify(state)
   );
+
+  syncGameStateToFirebase(state);
 }
 
 function setState(patch) {
@@ -137,9 +158,9 @@ function isAnswerAlreadyRevealed(answer) {
   );
 
   return (
-    answerIndex !== -1 &&
-    Boolean(state.revealed[answerIndex])
-  );
+  answerIndex !== -1 &&
+  Boolean(state.revealed?.[answerIndex])
+);
 }
 
 function getTransmissions() {
@@ -158,11 +179,32 @@ function getTransmissions() {
   }
 }
 
+function syncTransmissionsToFirebase(transmissions) {
+  if (
+    !window.flightFeudFirebase ||
+    !window.flightFeudFirebase.database
+  ) {
+    return;
+  }
+
+  window.flightFeudFirebase.database
+    .ref("game/transmissions")
+    .set(transmissions)
+    .catch((error) => {
+      console.error(
+        "Unable to sync transmissions to Firebase:",
+        error
+      );
+    });
+}
+
 function saveTransmissions(transmissions) {
   localStorage.setItem(
     TRANSMISSIONS_KEY,
     JSON.stringify(transmissions)
   );
+
+  syncTransmissionsToFirebase(transmissions);
 }
 
 function savePendingTransmission(
