@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let lastRevealedSnapshot = "";
   let lastWinner = "";
   let lastStrikeSnapshot = "";
+  let lastCelebratedRound = "";
 
   function formatTime(totalSeconds) {
     const minutes = String(
@@ -346,6 +347,86 @@ document.addEventListener("DOMContentLoaded", () => {
     projectorWinnerOverlay.classList.add("show");
   }
 
+  function launchProjectorConfetti() {
+  const colors = [
+    "#ffd54f",
+    "#4dc3ff",
+    "#7cff8a",
+    "#ff4d5a",
+    "#ffffff"
+  ];
+
+  for (let i = 0; i < 120; i += 1) {
+    const piece =
+      document.createElement("div");
+
+    piece.className = "confetti-piece";
+
+    piece.style.left =
+      `${Math.random() * 100}vw`;
+
+    piece.style.background =
+      colors[
+        Math.floor(
+          Math.random() * colors.length
+        )
+      ];
+
+    piece.style.animationDuration =
+      `${2.2 + Math.random() * 2.2}s`;
+
+    piece.style.animationDelay =
+      `${Math.random() * 0.5}s`;
+
+    document.body.appendChild(piece);
+
+    window.setTimeout(() => {
+      piece.remove();
+    }, 5000);
+  }
+}
+  function detectRoundComplete(
+  state,
+  question
+) {
+  const revealed =
+    state.revealed || {};
+
+  const allAnswersRevealed =
+    question.answers.every(
+      (_, index) =>
+        Boolean(revealed[index])
+    );
+
+  const roundKey =
+    `${state.sessionId || "game"}-${state.round}`;
+
+  if (
+    allAnswersRevealed &&
+    lastCelebratedRound !== roundKey
+  ) {
+    lastCelebratedRound = roundKey;
+
+    window.setTimeout(() => {
+      launchProjectorConfetti();
+
+      showRevealBanner(
+        "ROUND COMPLETE!"
+      );
+    }, 1800);
+  }
+
+  /*
+    New/cleared round:
+    allow celebration again.
+  */
+  if (
+    !allAnswersRevealed &&
+    lastCelebratedRound === roundKey
+  ) {
+    lastCelebratedRound = "";
+  }
+}
   function renderProjector() {
     const state =
       getState();
@@ -369,11 +450,12 @@ document.addEventListener("DOMContentLoaded", () => {
     projectorQuestion.textContent =
       question.prompt;
 
-    renderAnswerBoard(state, question);
-    renderScores(state);
-    detectRevealEffects(state, question);
-    detectStrikeEffects(state);
-    renderWinner(state);
+ renderAnswerBoard(state, question);
+renderScores(state);
+detectRevealEffects(state, question);
+detectStrikeEffects(state);
+detectRoundComplete(state, question);
+renderWinner(state);
   }
 
   window.addEventListener(

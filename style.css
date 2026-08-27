@@ -2478,4 +2478,815 @@ body.strike-shake .strike-overlay p {
 
   text-shadow:
     0 0 20px rgba(255, 213, 79, 0.22);
+}/* =========================================
+   PROJECTOR — AUTO FIT CLASSROOM DISPLAY
+   Keeps entire game board inside one screen
+========================================= */
+
+@media screen {
+
+  .projector-shell {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .projector-topbar {
+    flex: 0 0 auto;
+  }
+
+  .projector-layout {
+    flex: 1 1 auto;
+    min-height: 0;
+
+    display: grid;
+    grid-template-rows:
+      auto
+      auto
+      minmax(0, 1fr);
+
+    gap: clamp(6px, 1vh, 14px);
+
+    overflow: hidden;
+  }
+
+  /* SCOREBOARD */
+  .projector-scoreboard-panel {
+    flex-shrink: 0;
+  }
+
+  .projector-scores {
+    gap: clamp(5px, 0.7vh, 10px);
+  }
+
+  .projector-score-card {
+    min-height: 0;
+    padding-top: clamp(5px, 0.7vh, 10px);
+    padding-bottom: clamp(5px, 0.7vh, 10px);
+  }
+
+  /* QUESTION */
+  .projector-question-panel {
+    min-height: 0;
+    padding-top: clamp(10px, 1.4vh, 20px);
+    padding-bottom: clamp(10px, 1.4vh, 20px);
+  }
+
+  .projector-question-panel h2 {
+    font-size: clamp(1.35rem, 2.5vw, 2.7rem);
+  }
+
+  /* ANSWER BOARD */
+  .projector-board-panel {
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+  }
+
+  .projector-board-panel .panel-header {
+    flex: 0 0 auto;
+  }
+
+  #projectorAnswerBoard {
+    flex: 1 1 auto;
+    min-height: 0;
+
+    display: grid;
+    grid-template-rows: repeat(6, minmax(0, 1fr));
+
+    gap: clamp(4px, 0.6vh, 9px);
+  }
+
+  #projectorAnswerBoard .answer-row {
+    min-height: 0;
+    height: 100%;
+
+    padding-top: clamp(3px, 0.5vh, 8px);
+    padding-bottom: clamp(3px, 0.5vh, 8px);
+  }
+}
+
+
+/* =========================================
+   SHORT PROJECTOR / SMARTBOARD SCREENS
+========================================= */
+
+@media screen and (max-height: 800px) {
+
+  .projector-topbar {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .projector-topbar h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+  }
+
+  .projector-layout {
+    gap: 6px;
+  }
+
+  .projector-scoreboard-panel,
+  .projector-question-panel,
+  .projector-board-panel {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .projector-score-card {
+    padding: 4px 9px;
+  }
+
+  .projector-question-panel {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .projector-question-panel h2 {
+    font-size: clamp(1.25rem, 2.3vw, 2.2rem);
+  }
+
+  #projectorAnswerBoard {
+    gap: 4px;
+  }
+
+  #projectorAnswerBoard .answer-row {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+}
+/* =========================================
+   PROJECTOR ANSWER ROW FIT FIX
+========================================= */
+
+#projectorAnswerBoard {
+  display: grid !important;
+  grid-template-rows: repeat(6, 1fr) !important;
+  gap: 8px !important;
+  min-height: 0 !important;
+}
+
+#projectorAnswerBoard .answer-row {
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.projector-board-panel {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+/* =========================================
+   FINAL CLASSROOM PROJECTOR POLISH
+========================================= */
+
+@media (min-width: 1200px) {
+
+  .projector-board-panel {
+    padding-bottom: 12px !important;
+  }
+
+  #projectorAnswerBoard {
+    gap: 10px !important;
+  }
+
+  #projectorAnswerBoard .answer-row {
+    min-height: 58px !important;
+  }
+}
+/* =========================================
+   CLASSROOM PROJECTOR — ANSWER SPACING FIX
+========================================= */
+
+#projectorAnswerBoard {
+  display: grid !important;
+  grid-template-rows: repeat(6, minmax(48px, 1fr)) !important;
+  gap: 5px !important;
+}
+
+#projectorAnswerBoard .answer-card {
+  min-height: 48px !important;
+  height: 100% !important;
+  margin: 0 !important;
+}
+
+#projectorAnswerBoard .answer-card-inner,
+#projectorAnswerBoard .answer-card-face {
+  min-height: 48px !important;
+  height: 100% !important;
+}
+
+/* Reclaim a little vertical room above the answers */
+
+.projector-scoreboard-panel {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.projector-score-card {
+  min-height: 52px !important;
+  padding-top: 5px !important;
+  padding-bottom: 5px !important;
+}
+
+.projector-question-panel {
+  min-height: 82px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.projector-board-panel {
+  padding-top: 8px !important;
+  padding-bottom: 10px !important;
+}
+/* =========================================
+   VIEWSONIC HEIGHT FIX
+   Reclaim space ABOVE the answer board
+========================================= */
+
+@media (min-width: 1200px) and (max-height: 900px) {
+
+  /* Main page spacing */
+  .projector-shell {
+    gap: 6px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  /* Top Flight Feud header */
+  .projector-header {
+    min-height: 70px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  /* Crew scoreboard */
+  .projector-scoreboard-panel {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  .projector-score-card {
+    min-height: 42px !important;
+  }
+
+  /* Question section */
+  .projector-question-panel {
+    min-height: 65px !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+  }
+
+  /* Survey answer area */
+  .projector-board-panel {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+}
+/* =========================================
+   VIEWSONIC — WHOLE PAGE SCALE FIT
+========================================= */
+
+@media screen and (min-width: 1200px) and (max-height: 900px) {
+
+  body {
+    overflow: hidden !important;
+  }
+
+  .projector-shell {
+    width: 111.12% !important;
+    height: 111.12vh !important;
+
+    transform: scale(0.90);
+    transform-origin: top left;
+
+    overflow: hidden !important;
+  }
+}
+@media screen and (min-width: 1200px) and (max-height: 900px) {
+
+  .projector-topbar {
+    height: 58px !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+
+  .projector-topbar h1 {
+    font-size: 1.8rem !important;
+  }
+
+  .projector-scoreboard-panel {
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .projector-question-panel {
+    min-height: 52px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  #projectorAnswerBoard {
+    gap: 6px !important;
+  }
+}
+/* =========================================
+   FINAL CLASSROOM LAYOUT
+   Compact top / larger answer board
+========================================= */
+
+@media screen and (min-width: 1200px) and (max-height: 900px) {
+
+  /* Keep the whole projector page fit */
+  .projector-shell {
+    height: 100vh !important;
+    overflow: hidden !important;
+  }
+
+  /* -------------------------
+     TOP HEADER — SMALLER
+  ------------------------- */
+
+  .projector-topbar {
+    height: 52px !important;
+    min-height: 0 !important;
+    padding: 3px 14px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .projector-topbar h1 {
+    font-size: 1.65rem !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+  }
+
+  .projector-topbar .eyebrow {
+    font-size: 0.62rem !important;
+    margin-bottom: 2px !important;
+  }
+
+  .projector-hud-item {
+    min-width: 90px !important;
+    padding: 3px 8px !important;
+  }
+
+  .projector-hud-item span {
+    font-size: 0.58rem !important;
+  }
+
+  .projector-hud-item strong {
+    font-size: 1.05rem !important;
+  }
+
+  /* -------------------------
+     CREW SCORES — COMPACT
+  ------------------------- */
+
+  .projector-scoreboard-panel {
+    padding: 5px 12px !important;
+  }
+
+  .projector-scoreboard-panel .panel-header {
+    margin-bottom: 3px !important;
+  }
+
+  .projector-scoreboard-panel .eyebrow {
+    font-size: 0.58rem !important;
+  }
+
+  .projector-scoreboard-panel h2 {
+    font-size: 1.15rem !important;
+    margin: 0 !important;
+  }
+
+  .projector-scores {
+    gap: 4px !important;
+  }
+
+  .projector-score-card {
+    min-height: 34px !important;
+    padding: 3px 7px !important;
+    border-radius: 10px !important;
+  }
+
+  .projector-score-card strong {
+    font-size: 0.68rem !important;
+    line-height: 1 !important;
+  }
+
+  .projector-score-value {
+    min-width: 34px !important;
+    font-size: 1.35rem !important;
+  }
+
+  .projector-strikes {
+    margin-top: 1px !important;
+    gap: 2px !important;
+  }
+
+  .projector-strikes span {
+    width: 14px !important;
+    height: 14px !important;
+    font-size: 0.5rem !important;
+  }
+
+  /* -------------------------
+     QUESTION — COMPACT
+  ------------------------- */
+
+  .projector-question-panel {
+    min-height: 52px !important;
+    padding: 4px 60px !important;
+  }
+
+  .projector-question-panel .eyebrow {
+    margin-bottom: 2px !important;
+    font-size: 0.62rem !important;
+  }
+
+  .projector-question-panel h2 {
+    font-size: 1.65rem !important;
+    line-height: 1.05 !important;
+  }
+
+  /* -------------------------
+     ANSWERS — MAIN FOCUS
+  ------------------------- */
+
+  .projector-board-panel {
+    padding: 5px 12px 8px !important;
+  }
+
+  .projector-board-panel .panel-header {
+    margin-bottom: 5px !important;
+  }
+
+  .projector-board-panel .eyebrow {
+    font-size: 0.58rem !important;
+  }
+
+  .projector-board-panel h2 {
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+  }
+
+  #projectorAnswerBoard {
+    display: grid !important;
+    grid-template-rows: repeat(6, minmax(54px, 1fr)) !important;
+    gap: 6px !important;
+    min-height: 0 !important;
+  }
+
+  #projectorAnswerBoard .answer-card {
+    min-height: 54px !important;
+    height: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Center all placeholder numbers consistently */
+  #projectorAnswerBoard .answer-card-inner,
+  #projectorAnswerBoard .answer-card-face {
+    min-height: 54px !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  #projectorAnswerBoard .answer-card-number {
+    display: grid !important;
+    place-items: center !important;
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    margin: 0 10px 0 0 !important;
+    line-height: 1 !important;
+  }
+
+  #projectorAnswerBoard .answer-card-text,
+  #projectorAnswerBoard .answer-hidden-label {
+    flex: 1 1 auto !important;
+    display: grid !important;
+    place-items: center !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+  }
+
+  #projectorAnswerBoard .answer-card-points {
+    flex: 0 0 72px !important;
+    width: 72px !important;
+    align-self: stretch !important;
+    display: grid !important;
+    place-items: center !important;
+    margin: 0 !important;
+  }
+}
+/* =========================================
+   CLASSROOM READABILITY BOOST
+   Keep compact layout, restore large text
+========================================= */
+
+@media screen and (min-width: 1200px) and (max-height: 900px) {
+
+  /* Main Flight Feud title */
+  .projector-topbar h1 {
+    font-size: 2.15rem !important;
+  }
+
+  .projector-topbar .eyebrow {
+    font-size: 0.72rem !important;
+  }
+
+  /* Round / clock / points */
+  .projector-hud-item span {
+    font-size: 0.68rem !important;
+  }
+
+  .projector-hud-item strong {
+    font-size: 1.35rem !important;
+  }
+
+  /* Crew Scores heading */
+  .projector-scoreboard-panel .eyebrow {
+    font-size: 0.68rem !important;
+  }
+
+  .projector-scoreboard-panel h2 {
+    font-size: 1.4rem !important;
+  }
+
+  /* Crew names */
+  .projector-score-card strong {
+    font-size: 0.85rem !important;
+  }
+
+  /* Crew score numbers */
+  .projector-score-value {
+    font-size: 1.65rem !important;
+  }
+
+  /* Mission Brief */
+  .projector-question-panel .eyebrow {
+    font-size: 0.7rem !important;
+  }
+
+  /* THE QUESTION — needs to be readable across room */
+  .projector-question-panel h2 {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+  }
+
+  /* Survey Answers heading */
+  .projector-board-panel .eyebrow {
+    font-size: 0.68rem !important;
+  }
+
+  .projector-board-panel h2 {
+    font-size: 1.5rem !important;
+  }
+
+  /* 1–6 circles */
+  #projectorAnswerBoard .answer-card-number {
+    font-size: 1.45rem !important;
+    font-weight: 800 !important;
+  }
+
+  /* Hidden 1–6 inside answer bars */
+  #projectorAnswerBoard .answer-hidden-label {
+    font-size: 1.5rem !important;
+    font-weight: 800 !important;
+  }
+
+  /* REVEALED ANSWERS — make these BIG */
+  #projectorAnswerBoard .answer-card-text {
+    font-size: 1.75rem !important;
+    font-weight: 800 !important;
+  }
+
+  /* Point values */
+  #projectorAnswerBoard .answer-card-points {
+    font-size: 1.6rem !important;
+    font-weight: 900 !important;
+  }
+}
+/* =========================================
+   CLASSROOM FINAL SIZE BOOST
+   Fill more of the physical display
+========================================= */
+
+@media screen and (min-width: 1200px) and (max-height: 900px) {
+
+  /* Expand entire projector interface */
+  .projector-shell {
+    width: 100vw !important;
+    max-width: none !important;
+    padding: 4px 8px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  /* Let the major panels use nearly all screen width */
+  .projector-scoreboard-panel,
+  .projector-question-panel,
+  .projector-board-panel {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* ANSWERS are the star of the screen */
+  #projectorAnswerBoard {
+    gap: 7px !important;
+  }
+
+  #projectorAnswerBoard .answer-card {
+    min-height: 58px !important;
+  }
+
+  #projectorAnswerBoard .answer-card-inner,
+  #projectorAnswerBoard .answer-card-face {
+    min-height: 58px !important;
+  }
+
+  /* Larger revealed answer words */
+  #projectorAnswerBoard .answer-card-text {
+    font-size: 2.15rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  /* Larger hidden 1–6 */
+  #projectorAnswerBoard .answer-hidden-label {
+    font-size: 1.8rem !important;
+    font-weight: 900 !important;
+  }
+
+  /* Larger left-side number circles */
+  #projectorAnswerBoard .answer-card-number {
+    width: 46px !important;
+    height: 46px !important;
+    flex-basis: 46px !important;
+    font-size: 1.55rem !important;
+  }
+
+  /* Larger point values */
+  #projectorAnswerBoard .answer-card-points {
+    flex-basis: 82px !important;
+    width: 82px !important;
+    font-size: 1.9rem !important;
+  }
+}
+/* =========================================
+   PROJECTOR ANSWER ALIGNMENT
+   Number left / Answer centered / Score right
+========================================= */
+
+#projectorAnswerBoard .answer-card-inner,
+#projectorAnswerBoard .answer-card-face {
+  display: grid !important;
+
+  grid-template-columns:
+    58px
+    minmax(0, 1fr)
+    90px !important;
+
+  align-items: center !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  padding: 0 8px !important;
+  box-sizing: border-box !important;
+}
+
+
+/* LEFT NUMBER CIRCLE */
+#projectorAnswerBoard .answer-card-number {
+  grid-column: 1 !important;
+
+  justify-self: start !important;
+  align-self: center !important;
+
+  margin: 0 !important;
+}
+
+
+/* CENTER ANSWER */
+#projectorAnswerBoard .answer-card-text,
+#projectorAnswerBoard .answer-hidden-label {
+  grid-column: 2 !important;
+
+  justify-self: stretch !important;
+  align-self: center !important;
+
+  width: 100% !important;
+  margin: 0 !important;
+
+  text-align: center !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  line-height: 1 !important;
+}
+
+
+/* RIGHT POINT VALUE */
+#projectorAnswerBoard .answer-card-points {
+  grid-column: 3 !important;
+
+  justify-self: end !important;
+  align-self: stretch !important;
+
+  width: 82px !important;
+  min-width: 82px !important;
+
+  margin: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  text-align: center !important;
+}
+/* =========================================
+   FINAL ANSWER READABILITY BOOST
+   Larger answer text without changing layout
+========================================= */
+
+@media screen and (min-width: 1200px) and (max-height: 900px) {
+
+  /* Revealed answer words — MAIN FOCUS */
+  #projectorAnswerBoard .answer-card-text {
+    font-size: 2.55rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    text-align: center !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Hidden numbers centered inside the blue answer bars */
+  #projectorAnswerBoard .answer-hidden-label {
+    font-size: 2rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Score/point value on RIGHT */
+  #projectorAnswerBoard .answer-card-points {
+    font-size: 2.2rem !important;
+    font-weight: 900 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+/* =========================================
+   PROJECTOR ANSWER TEXT SIZE
+   Larger for classroom visibility
+========================================= */
+
+#projectorAnswerBoard .answer-card-text {
+  font-size: 5.5rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* Hidden 1–6 inside the center of each bar */
+#projectorAnswerBoard .answer-hidden-label {
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+}
+
+/* Point value on right */
+#projectorAnswerBoard .answer-card-points {
+  font-size: 2.2rem !important;
+  font-weight: 900 !important;
+}
+/* =========================================
+   PROJECTOR — KEEP REVEALED ANSWERS STILL
+========================================= */
+
+#projectorAnswerBoard .row-answer {
+  animation: none !important;
 }
