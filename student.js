@@ -111,9 +111,14 @@ localStorage.setItem(
   // Immediately remove crew selection
   // from the screen.
   crewSelectPanel.classList.add("hidden");
-  lockedCrewPanel.classList.remove("hidden");
+lockedCrewPanel.classList.remove("hidden");
 
-  renderStudentConsole();
+/* Force fresh answer boxes after crew selection */
+renderedRound = null;
+renderedCrew = null;
+renderedSubmissionCount = null;
+
+renderStudentConsole();
 }
 
   function renderCrewChoices() {
@@ -496,6 +501,14 @@ localStorage.setItem(
       renderedSubmissionCount =
         submitted;
     }
+
+    /* Safety check: if boxes disappeared, rebuild them */
+if (
+  remainingSlots > 0 &&
+  answerInputs.children.length === 0
+) {
+  buildAnswerInputs(remainingSlots);
+}
 
     if (remainingSlots === 0) {
       submitAnswerBtn.disabled = true;

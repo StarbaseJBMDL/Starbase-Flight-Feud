@@ -104,6 +104,21 @@ function setRound(roundNumber) {
 function resetGameState() {
   localStorage.removeItem(TRANSMISSIONS_KEY);
 
+  if (
+    window.flightFeudFirebase &&
+    window.flightFeudFirebase.database
+  ) {
+    window.flightFeudFirebase.database
+      .ref("game/transmissions")
+      .remove()
+      .catch((error) => {
+        console.error(
+          "Unable to clear Firebase transmissions:",
+          error
+        );
+      });
+  }
+
   const fresh = createDefaultState();
 
   saveState(fresh);
