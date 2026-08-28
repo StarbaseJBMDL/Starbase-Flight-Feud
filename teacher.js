@@ -188,7 +188,6 @@ function checkRoundComplete(revealedState) {
 
   if (allAnswersRevealed) {
     window.setTimeout(() => {
-      launchConfetti();
       showRevealBanner("ROUND COMPLETE!");
     }, 1800);
   }
